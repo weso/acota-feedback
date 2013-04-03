@@ -48,12 +48,12 @@ public class FeedbackMysqlDAO extends GenericMysqlDAO implements FeedbackDAO {
 	public FeedbackMysqlDAO() throws AcotaConfigurationException {
 		super();
 		DocumentTable document = configuration.getDocumentTuple();
-		this.documentTableName = document.getName();
+		this.documentTableName = configuration.getDatabasePrefix()+document.getName();
 		this.documentIdAttribute = document.getIdAttribute();
 		this.documentNameAttribute = document.getNameAttribute();
 
 		FeedbackTable feedback = configuration.getFeedbackTuple();
-		this.feedbackTableName = feedback.getName();
+		this.feedbackTableName = configuration.getDatabasePrefix()+feedback.getName();
 		this.feedbackIdAttribute = feedback.getIdAttribute();
 		this.feedbackUserIdAttribute = feedback.getUserIdAttribute();
 		this.feedbackDocumentIdAttribute = feedback.getDocumentIdAttribute();
@@ -62,7 +62,7 @@ public class FeedbackMysqlDAO extends GenericMysqlDAO implements FeedbackDAO {
 		this.feedbackTimestampAttribute = feedback.getTimestampAttribute();
 
 		LabelTable label = configuration.getLabelTuple();
-		this.labelTableName = label.getName();
+		this.labelTableName = configuration.getDatabasePrefix()+label.getName();
 		this.labelIdAttribute = label.getIdAttribute();
 		this.labelNameAttribute = label.getNameAttribute();
 	}

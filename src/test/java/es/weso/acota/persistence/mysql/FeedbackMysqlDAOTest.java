@@ -49,7 +49,7 @@ public class FeedbackMysqlDAOTest {
 		Class.forName("com.mysql.jdbc.Driver");
 		FeedbackConfiguration configuration = new FeedbackConfiguration();
 		Connection jdbcConnection = DriverManager.getConnection(
-				"jdbc:mysql://"+ configuration.getDatabaseUrl() +"/"+configuration.getDatabaseName()+"?useTimezone=false&useLegacyDatetimeCode=false&serverTimezone=UTC", configuration.getDatabaseUser(), configuration.getDatabasePassword());
+				"jdbc:mysql://"+ configuration.getDatabaseUrl() + ":"+ configuration.getDatabasePort()+"/"+configuration.getDatabaseName()+"?useTimezone=false&useLegacyDatetimeCode=false&serverTimezone=UTC", configuration.getDatabaseUser(), configuration.getDatabasePassword());
 		IDatabaseConnection connection = new DatabaseConnection(jdbcConnection);
 		
 		DatabaseConfig dbConfig = connection.getConfig();

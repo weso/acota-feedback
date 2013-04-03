@@ -35,7 +35,7 @@ public class LabelMysqlDAO extends GenericMysqlDAO implements LabelDAO {
 	public LabelMysqlDAO() throws AcotaConfigurationException  {
 		super();
 		LabelTable label = configuration.getLabelTuple();
-		this.tableName = label.getName();
+		this.tableName = configuration.getDatabasePrefix()+label.getName();
 		this.idAttribute = label.getIdAttribute();
 		this.nameAttribute = label.getNameAttribute();
 	}

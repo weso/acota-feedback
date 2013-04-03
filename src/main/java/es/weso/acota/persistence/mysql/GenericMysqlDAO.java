@@ -31,7 +31,7 @@ public abstract class GenericMysqlDAO implements GenericDAO {
 		super();
 		this.configuration = new FeedbackConfiguration();
 		this.url = new StringBuilder("jdbc:mysql://")
-				.append(configuration.getDatabaseUrl()).append("/")
+				.append(configuration.getDatabaseUrl()).append(":").append(configuration.getDatabasePort()).append("/")
 				.append(configuration.getDatabaseName()).toString();
 	}
 

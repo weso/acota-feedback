@@ -44,7 +44,7 @@ public class LabelMysqlDAOTest {
 		Class.forName("com.mysql.jdbc.Driver");
 		FeedbackConfiguration configuration = new FeedbackConfiguration();
 		Connection jdbcConnection = DriverManager.getConnection(
-				"jdbc:mysql://"+ configuration.getDatabaseUrl() +"/"+configuration.getDatabaseName(), configuration.getDatabaseUser(), configuration.getDatabasePassword());
+				"jdbc:mysql://"+ configuration.getDatabaseUrl() + ":"+ configuration.getDatabasePort()+"/"+configuration.getDatabaseName(), configuration.getDatabaseUser(), configuration.getDatabasePassword());
 		
 		IDatabaseConnection connection = new DatabaseConnection(jdbcConnection);
 		

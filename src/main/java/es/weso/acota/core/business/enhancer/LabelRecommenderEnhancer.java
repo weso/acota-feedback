@@ -134,6 +134,7 @@ public class LabelRecommenderEnhancer extends EnhancerAdapter implements Feedbac
 		
 		MysqlDataSource dataSource = new MysqlDataSource();
 		dataSource.setServerName(configuration.getDatabaseUrl());
+		dataSource.setPort(Integer.parseInt(configuration.getDatabasePort()));
 		dataSource.setUser(configuration.getDatabaseUser());
 		dataSource.setPassword(configuration.getDatabasePassword());
 		dataSource.setDatabaseName(configuration.getDatabaseName());
@@ -143,7 +144,7 @@ public class LabelRecommenderEnhancer extends EnhancerAdapter implements Feedbac
 		FeedbackTable feedback = configuration.getFeedbackTuple();
 
 		JDBCDataModel dataModel = new MySQLJDBCDataModel(data,
-				feedback.getName(), feedback.getDocumentIdAttribute(),
+				configuration.getDatabasePrefix()+feedback.getName(), feedback.getDocumentIdAttribute(),
 				feedback.getLabelIdAttribute(), feedback.getPreferenceAttribute(),
 				feedback.getTimestampAttribute());
 

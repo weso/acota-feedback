@@ -29,9 +29,11 @@ public class FeedbackConfiguration implements Configuration {
 	protected String labelDAOClass;
 
 	protected String databaseUrl;
+	protected String databasePort;
 	protected String databaseName;
 	protected String databaseUser;
 	protected String databasePassword;
+	protected String databasePrefix;
 
 	protected DocumentTable documentTuple;
 	protected FeedbackTable feedbackTuple;
@@ -86,9 +88,11 @@ public class FeedbackConfiguration implements Configuration {
 	 */
 	private void loadDatabaseConfig() {
 		this.databaseUrl = CONFIG.getString("database.url");
+		this.databasePort = CONFIG.getString("database.port");
 		this.databaseName = CONFIG.getString("database.name");
 		this.databaseUser = CONFIG.getString("database.user");
 		this.databasePassword = CONFIG.getString("database.password");
+		this.databasePrefix = CONFIG.getString("database.prefix");
 	}
 
 	/**
@@ -181,6 +185,14 @@ public class FeedbackConfiguration implements Configuration {
 		this.databaseUrl = databaseUrl;
 	}
 
+	public String getDatabasePort() {
+		return databasePort;
+	}
+
+	public void setDatabasePort(String databasePort) {
+		this.databasePort = databasePort;
+	}
+	
 	public String getDatabaseName() {
 		return databaseName;
 	}
@@ -204,6 +216,15 @@ public class FeedbackConfiguration implements Configuration {
 	public void setDatabasePassword(String databasePassword) {
 		this.databasePassword = databasePassword;
 	}
+
+	public String getDatabasePrefix() {
+		return databasePrefix;
+	}
+
+	public void setDatabasePrefix(String databasePrefix) {
+		this.databasePrefix = databasePrefix;
+	}
+	
 
 	public DocumentTable getDocumentTuple() {
 		return documentTuple;

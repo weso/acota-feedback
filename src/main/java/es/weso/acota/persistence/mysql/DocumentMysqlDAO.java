@@ -35,7 +35,7 @@ public class DocumentMysqlDAO extends GenericMysqlDAO implements DocumentDAO {
 	public DocumentMysqlDAO() throws AcotaConfigurationException {
 		super();
 		DocumentTable label = configuration.getDocumentTuple();
-		this.tableName = label.getName();
+		this.tableName = configuration.getDatabasePrefix()+label.getName();
 		this.idAttribute = label.getIdAttribute();
 		this.nameAttribute = label.getNameAttribute();
 	}
