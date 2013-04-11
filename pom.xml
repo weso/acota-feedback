@@ -18,11 +18,6 @@
 			<distribution>manual</distribution>
 		</license>
 	</licenses>
-	<scm>
-		<connection>scm:git:git@github.com:weso/acota-feedback.git</connection>
-		<url>scm:git:git@github.com:weso/acota-feedback.git</url>
-		<developerConnection>scm:git:git@github.com:weso/acota-feedback.git</developerConnection>
-	</scm>
 	<organization>
 		<name>WESO</name>
 		<url>http://www.weso.es</url>
@@ -40,6 +35,17 @@
 			</roles>
 		</developer>
 	</developers>
+	<scm>
+		<connection>scm:git:git@github.com:weso/acota-feedback.git</connection>
+		<url>scm:git:git@github.com:weso/acota-feedback.git</url>
+		<developerConnection>scm:git:git@github.com:weso/acota-feedback.git</developerConnection>
+	</scm>
+	<distributionManagement>
+		<snapshotRepository>
+			<id>sonatype-nexus-snapshots</id>
+			<url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+		</snapshotRepository>
+	</distributionManagement>
 	<dependencies>
 		<dependency>
 			<groupId>junit</groupId>
