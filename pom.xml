@@ -24,9 +24,11 @@
 	</organization>
 	<developers>
 		<developer>
+			<id>cesarla</id>
 			<name>César Luis Alvargonzález</name>
-			<organization>WESO</organization>
+			<email>info@cesarla.com</email>
 			<url>http://www.cesarla.com</url>
+			<organization>WESO</organization>
 			<organizationUrl>http://www.weso.es</organizationUrl>
 			<roles>
 				<role>architect</role>

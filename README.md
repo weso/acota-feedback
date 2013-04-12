@@ -18,8 +18,26 @@ Detailed information of how to run acota-feedback:
  - [Acota-Feedback] (https://github.com/weso/acota-feedback/wiki/Generate-Some-Keywords)
 
 ## Download ##
-Grab the latest version of acota-core:
- - [Acota Downloads Page](https://github.com/weso/acota-feedback/wiki/Download---ACOTA)
+The current version of acota is **0.3.7**, you can download it from:
+
+### For Maven Users
+Acota-Core is available in Maven Central:
+ ```
+  <dependency>
+    <groupId>es.weso</groupId>
+    <artifactId>acota-feedback</artifactId>
+    <version>0.3.7</version>
+ </dependency>
+ ```
+ 
+Looking for SNAPSHOTS?
+* [SNAPSHOTS](https://oss.sonatype.org/content/repositories/snapshots/es/weso/acota-feedback/0.3.7-SNAPSHOT/ "Acota-feedback SNAPSHOTS Repository")
+
+### For Non Maven Users
+Acota-bundle includes all required dependancies:
+
+ * [acota-feedback-0.3.7.jar](http://156.35.82.101:7000/downloads/acota/0.3.7/core/acota-feedback-0.3.7.jar "Download acota-feedback-0.3.7.jar")
+
 
 ## Disclaimer
 Acota-feedback requires a MySQL Database, you can download the SQL Creation Script from:
