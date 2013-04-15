@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>es.weso</groupId>
 	<artifactId>acota-feedback</artifactId>
@@ -6,7 +7,7 @@
 	<packaging>jar</packaging>
 	<description>acota-feedback, library ${project.version}</description>
 	<name>acota-feedback</name>
-	<url>https://github.com/Cesarla/ACOTA/</url>
+	<url>https://github.com/weso/acota-feedback.git</url>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
@@ -40,9 +41,10 @@
 		<connection>scm:git:git@github.com:weso/acota-feedback.git</connection>
 		<url>scm:git:git@github.com:weso/acota-feedback.git</url>
 		<developerConnection>scm:git:git@github.com:weso/acota-feedback.git</developerConnection>
-    <tag>HEAD</tag>
-  </scm>
+		<tag>HEAD</tag>
+	</scm>
 	<dependencies>
+		<!-- For testing purposes -->
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
@@ -52,7 +54,7 @@
 		<dependency>
 			<groupId>org.mockito</groupId>
 			<artifactId>mockito-all</artifactId>
-			<version>1.9.0</version>
+			<version>1.9.5</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
@@ -63,18 +65,8 @@
 		</dependency>
 		<dependency>
 			<groupId>es.weso</groupId>
-			<artifactId>acota-core</artifactId>
+			<artifactId>acota-seed</artifactId>
 			<version>0.3.8-SNAPSHOT</version>
-		</dependency>
-		<dependency>
-			<groupId>log4j</groupId>
-			<artifactId>log4j</artifactId>
-			<version>1.2.17</version>
-		</dependency>
-		<dependency>
-			<groupId>commons-configuration</groupId>
-			<artifactId>commons-configuration</artifactId>
-			<version>1.9</version>
 		</dependency>
 		<dependency>
 			<groupId>mysql</groupId>
