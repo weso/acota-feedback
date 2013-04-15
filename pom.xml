@@ -40,7 +40,7 @@
 		<connection>scm:git:git@github.com:weso/acota-feedback.git</connection>
 		<url>scm:git:git@github.com:weso/acota-feedback.git</url>
 		<developerConnection>scm:git:git@github.com:weso/acota-feedback.git</developerConnection>
-	  <tag>0.3.7</tag>
+    <tag>0.3.7</tag>
   </scm>
 	<dependencies>
 		<dependency>
