@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>es.weso</groupId>
 	<artifactId>acota-feedback</artifactId>
-	<version>0.3.7-SNAPSHOT</version>
+	<version>0.3.7</version>
 	<packaging>jar</packaging>
 	<description>acota-feedback, library ${project.version}</description>
 	<name>acota-feedback</name>
@@ -40,7 +40,8 @@
 		<connection>scm:git:git@github.com:weso/acota-feedback.git</connection>
 		<url>scm:git:git@github.com:weso/acota-feedback.git</url>
 		<developerConnection>scm:git:git@github.com:weso/acota-feedback.git</developerConnection>
-	</scm>
+	  <tag>0.3.7</tag>
+  </scm>
 	<dependencies>
 		<dependency>
 			<groupId>junit</groupId>
