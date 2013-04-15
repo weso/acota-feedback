@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+
+	<feedbacks id="1" user_id="1" document_id="-220345143" 
+		label_id="-350895717" preference="1" timestamp="2012-10-24 19:24:07" />
+	<feedbacks id="2" user_id="2" document_id="-220345143" 
+		label_id="-350895717" preference="1" timestamp="2012-10-24 19:24:07" />
+	<feedbacks id="3" user_id="2" document_id="778016507" 
+		label_id="98629247" preference="1" timestamp="2012-10-24 19:24:07" />
+	<feedbacks id='4' user_id='4' document_id='778016507' 
+		label_id='98629247' preference='1' timestamp='2012-10-24 19:24:07'/>
+		
+	<labels id="-350895717" name="research" timestamp="2012-10-24 19:24:07" />
+	<labels id="98629247" name="group" timestamp="2012-10-24 19:24:07" />
+	<labels id="701384300" name="multidisciplinary" timestamp="2012-10-24 19:24:07" />
+	<labels id='701384300' name='multidisciplinary' timestamp='2012-10-24 19:24:07'/>
+	
+	<documents id="-220345143" name="http://www.weso.es" timestamp="2012-10-24 19:24:07" />
+	<documents id="778016507" name="http://www.example.es" timestamp="2012-10-24 19:24:07" />
+	<documents id='1177819807' name='http://www.foo.es' timestamp='2012-10-24 19:24:07'/>
+	
+</dataset>

@@ -1,0 +1,27 @@
+language: java
+
+jdk:
+  - openjdk6
+  - openjdk7
+  - oraclejdk7
+
+before_script:
+  - 'wget http://156.35.82.101:7000/downloads/acota/utils/travis/feedback/acota.properties'
+  - 'wget http://156.35.82.101:7000/downloads/acota/utils/travis/sql/acota.sql'
+  - mysql --user="root" --password="" -e 'SET GLOBAL time_zone = "+00:00";'
+  - mysql -e 'create database acota;'
+  - mysql --user="root" --password="" acota < acota.sql
+  - 'wget 156.35.82.101:7000/downloads/acota/utils/travis/maven/addServer.py'
+
+env:
+  global:
+    - SONATYPE_USERNAME=cesarla
+    - secure: "Ii8/eg7l8XE+XbrZj1WLBUOpMUVhlMDpV9wz+ptrAV7RSTzbFubi1Kgnsycv\nLtCzSlthugommBLF6EqsvXR4+LzdUm8kXV9T1SFumXPO7M7hlZFExse1PDq3\nawXfXZHfYjy7KBRxhoQyPgmXEvQUwQa1oab+AsuRoB5brBbSgAE="
+
+after_success:
+  - python addServer.py
+  - mvn clean deploy --settings ~/.m2/mySettings.xml
+
+notifications:
+  email:
+    - sisa989@gmail.com
