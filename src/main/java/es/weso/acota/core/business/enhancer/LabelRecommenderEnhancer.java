@@ -25,6 +25,7 @@ import es.weso.acota.core.entity.ProviderTO;
 import es.weso.acota.core.entity.TagTO;
 import es.weso.acota.core.entity.persistence.tables.FeedbackTable;
 import es.weso.acota.core.exceptions.AcotaConfigurationException;
+import es.weso.acota.core.utils.lang.LanguageUtil;
 import es.weso.acota.persistence.LabelDAO;
 import es.weso.acota.persistence.factory.FactoryDAO;
 
@@ -160,9 +161,11 @@ public class LabelRecommenderEnhancer extends EnhancerAdapter implements Feedbac
 	 * database access error or other errors.
 	 * @throws ClassNotFoundException Thrown when an application tries to load in a
 	 * class through its string name
+	 * @throws AcotaConfigurationException ConfigurationException Any exception that 
+	 * occurs while initializing a Configuration object
 	 */
 	protected void handleRecommendLabels(List<RecommendedItem> items)
-			throws SQLException, ClassNotFoundException {
+			throws SQLException, ClassNotFoundException, AcotaConfigurationException {
 		Collection<Integer> hashes = getHashCollection(items);
 		Set<String> recommendedLabel = labelDao.getLabelsByHashCodes(hashes);
 		for (String label : recommendedLabel) {
@@ -187,9 +190,12 @@ public class LabelRecommenderEnhancer extends EnhancerAdapter implements Feedbac
 	/**
 	 * Increases the weight of the {@link TagTO} associated to the label
 	 * @param label {@link TagTO}'s label
+	 * @throws AcotaConfigurationException ConfigurationException Any exception that 
+	 * occurs while initializing a Configuration object
 	 */
-	protected void handleRecommendLabel(String label) {
-		TagTO tag = new TagTO(label,provider,request.getResource());
+	protected void handleRecommendLabel(String label) throws AcotaConfigurationException {
+		TagTO tag = new TagTO(label,LanguageUtil.detect(label),
+				provider,request.getResource());
 		fillSuggestions(tag, relevance);
 	}
 
