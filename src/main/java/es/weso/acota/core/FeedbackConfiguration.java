@@ -5,6 +5,7 @@ import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.log4j.Logger;
 
+import es.weso.acota.core.business.enhancer.SeedConfiguration;
 import es.weso.acota.core.entity.persistence.tables.DocumentTable;
 import es.weso.acota.core.entity.persistence.tables.FeedbackTable;
 import es.weso.acota.core.entity.persistence.tables.LabelTable;
@@ -18,12 +19,13 @@ import es.weso.acota.core.exceptions.AcotaConfigurationException;
  * @author César Luis Alvargonzález
  * 
  */
-public class FeedbackConfiguration implements Configuration {
+public class FeedbackConfiguration extends SeedConfiguration implements Configuration {
 
-	protected static final String INTERNAL_ACOTA_PERSISTENCE_PROPERTIES_PATH = "/resources/inner.acota.persistence.properties";
+	protected static final String INTERNAL_ACOTA_PERSISTENCE_PROPERTIES_PATH = "inner.acota.persistence.properties";
 
 	protected static Logger LOGGER;
 	protected static CompositeConfiguration CONFIG;
+	
 	protected String documentDAOClass;
 	protected String feedbackDAOClass;
 	protected String labelDAOClass;
@@ -54,13 +56,11 @@ public class FeedbackConfiguration implements Configuration {
 	 *             object
 	 */
 	public FeedbackConfiguration() throws AcotaConfigurationException {
-		super();
-
 		FeedbackConfiguration.LOGGER = Logger.getLogger(FeedbackConfiguration.class);
-
-		if(CONFIG==null){
-			loadsConfiguration();
-		}
+		
+		CompositeConfiguration configuration = foo(CONFIG);
+		if(CONFIG==null)
+			FeedbackConfiguration.CONFIG = configuration;
 		
 		loadDAOClasses();
 		loadDatabaseConfig();
@@ -72,6 +72,137 @@ public class FeedbackConfiguration implements Configuration {
 		loadSimpleRecommenderSimple();
 	}
 
+	public String getDocumentDAOClass() {
+		return documentDAOClass;
+	}
+
+	public void setDocumentDAOClass(String documentDAOClass) {
+		this.documentDAOClass = documentDAOClass;
+	}
+
+	public String getFeedbackDAOClass() {
+		return feedbackDAOClass;
+	}
+
+	public void setFeedbackDAOClass(String feedbackDAOClass) {
+		this.feedbackDAOClass = feedbackDAOClass;
+	}
+
+	public String getLabelDAOClass() {
+		return labelDAOClass;
+	}
+
+	public void setLabelDAOClass(String labelDAOClass) {
+		this.labelDAOClass = labelDAOClass;
+	}
+
+	public String getDatabaseUrl() {
+		return databaseUrl;
+	}
+
+	public void setDatabaseUrl(String databaseUrl) {
+		this.databaseUrl = databaseUrl;
+	}
+
+	public String getDatabasePort() {
+		return databasePort;
+	}
+
+	public void setDatabasePort(String databasePort) {
+		this.databasePort = databasePort;
+	}
+	
+	public String getDatabaseName() {
+		return databaseName;
+	}
+
+	public void setDatabaseName(String databaseName) {
+		this.databaseName = databaseName;
+	}
+
+	public String getDatabaseUser() {
+		return databaseUser;
+	}
+
+	public void setDatabaseUser(String databaseUser) {
+		this.databaseUser = databaseUser;
+	}
+
+	public String getDatabasePassword() {
+		return databasePassword;
+	}
+
+	public void setDatabasePassword(String databasePassword) {
+		this.databasePassword = databasePassword;
+	}
+
+	public String getDatabasePrefix() {
+		return databasePrefix;
+	}
+
+	public void setDatabasePrefix(String databasePrefix) {
+		this.databasePrefix = databasePrefix;
+	}
+	
+	public DocumentTable getDocumentTuple() {
+		return documentTuple;
+	}
+
+	public void setDocumentTuple(DocumentTable documentTuple) {
+		this.documentTuple = documentTuple;
+	}
+
+	public FeedbackTable getFeedbackTuple() {
+		return feedbackTuple;
+	}
+
+	public void setFeedbackTuple(FeedbackTable feedbackTuple) {
+		this.feedbackTuple = feedbackTuple;
+	}
+
+	public LabelTable getLabelTuple() {
+		return labelTuple;
+	}
+
+	public void setLabelTuple(LabelTable labelTuple) {
+		this.labelTuple = labelTuple;
+	}
+
+	public double getSimpleRecommenderRelevance() {
+		return simpleRecommenderRelevance;
+	}
+
+	public void setSimpleRecommenderRelevance(double simpleRecommenderRelevance) {
+		this.simpleRecommenderRelevance = simpleRecommenderRelevance;
+	}
+
+	public double getLabelRecommenderRelevance() {
+		return labelRecommenderRelevance;
+	}
+
+	public void setLabelRecommenderRelevance(double labelRecommenderRelevance) {
+		this.labelRecommenderRelevance = labelRecommenderRelevance;
+	}
+
+	public int getLabelRecomenderNumRecommendations() {
+		return labelRecomenderNumRecommendations;
+	}
+
+	public void setLabelRecomenderNumRecommendations(
+			int labelRecomenderNumRecommendations) {
+		this.labelRecomenderNumRecommendations = labelRecomenderNumRecommendations;
+	}
+
+	@Override
+	protected void loadCustomConfiguration(CompositeConfiguration config) throws AcotaConfigurationException {
+		try {
+			config.addConfiguration(new PropertiesConfiguration(this.getClass().getClassLoader()
+					.getResource(INTERNAL_ACOTA_PERSISTENCE_PROPERTIES_PATH)));
+		} catch (ConfigurationException e) {
+			throw new AcotaConfigurationException(e);
+		}
+	}
+	
 	/**
 	 * Loads the DAO Classes properties
 	 */
@@ -151,147 +282,6 @@ public class FeedbackConfiguration implements Configuration {
 	private void loadSimpleRecommenderSimple() {
 		this.simpleRecommenderRelevance = CONFIG
 				.getDouble("enhancer.recommender.simple.relevance");
-	}
-
-	public String getDocumentDAOClass() {
-		return documentDAOClass;
-	}
-
-	public void setDocumentDAOClass(String documentDAOClass) {
-		this.documentDAOClass = documentDAOClass;
-	}
-
-	public String getFeedbackDAOClass() {
-		return feedbackDAOClass;
-	}
-
-	public void setFeedbackDAOClass(String feedbackDAOClass) {
-		this.feedbackDAOClass = feedbackDAOClass;
-	}
-
-	public String getLabelDAOClass() {
-		return labelDAOClass;
-	}
-
-	public void setLabelDAOClass(String labelDAOClass) {
-		this.labelDAOClass = labelDAOClass;
-	}
-
-	public String getDatabaseUrl() {
-		return databaseUrl;
-	}
-
-	public void setDatabaseUrl(String databaseUrl) {
-		this.databaseUrl = databaseUrl;
-	}
-
-	public String getDatabasePort() {
-		return databasePort;
-	}
-
-	public void setDatabasePort(String databasePort) {
-		this.databasePort = databasePort;
-	}
-	
-	public String getDatabaseName() {
-		return databaseName;
-	}
-
-	public void setDatabaseName(String databaseName) {
-		this.databaseName = databaseName;
-	}
-
-	public String getDatabaseUser() {
-		return databaseUser;
-	}
-
-	public void setDatabaseUser(String databaseUser) {
-		this.databaseUser = databaseUser;
-	}
-
-	public String getDatabasePassword() {
-		return databasePassword;
-	}
-
-	public void setDatabasePassword(String databasePassword) {
-		this.databasePassword = databasePassword;
-	}
-
-	public String getDatabasePrefix() {
-		return databasePrefix;
-	}
-
-	public void setDatabasePrefix(String databasePrefix) {
-		this.databasePrefix = databasePrefix;
-	}
-	
-
-	public DocumentTable getDocumentTuple() {
-		return documentTuple;
-	}
-
-	public void setDocumentTuple(DocumentTable documentTuple) {
-		this.documentTuple = documentTuple;
-	}
-
-	public FeedbackTable getFeedbackTuple() {
-		return feedbackTuple;
-	}
-
-	public void setFeedbackTuple(FeedbackTable feedbackTuple) {
-		this.feedbackTuple = feedbackTuple;
-	}
-
-	public LabelTable getLabelTuple() {
-		return labelTuple;
-	}
-
-	public void setLabelTuple(LabelTable labelTuple) {
-		this.labelTuple = labelTuple;
-	}
-
-	public double getSimpleRecommenderRelevance() {
-		return simpleRecommenderRelevance;
-	}
-
-	public void setSimpleRecommenderRelevance(double simpleRecommenderRelevance) {
-		this.simpleRecommenderRelevance = simpleRecommenderRelevance;
-	}
-
-	public double getLabelRecommenderRelevance() {
-		return labelRecommenderRelevance;
-	}
-
-	public void setLabelRecommenderRelevance(double labelRecommenderRelevance) {
-		this.labelRecommenderRelevance = labelRecommenderRelevance;
-	}
-
-	public int getLabelRecomenderNumRecommendations() {
-		return labelRecomenderNumRecommendations;
-	}
-
-	public void setLabelRecomenderNumRecommendations(
-			int labelRecomenderNumRecommendations) {
-		this.labelRecomenderNumRecommendations = labelRecomenderNumRecommendations;
-	}
-
-	/**
-	 * @see org.weso.acota.core.Configuration#loadsConfiguration()
-	 */
-	public void loadsConfiguration() throws AcotaConfigurationException {
-		FeedbackConfiguration.CONFIG = new CompositeConfiguration();
-		try {
-			CONFIG.addConfiguration(new PropertiesConfiguration(
-					"acota.properties"));
-		} catch (Exception e) {
-			LOGGER.warn("acota.properties not found, Using default values.");
-		}
-		try {
-			CONFIG.addConfiguration(new PropertiesConfiguration(this.getClass()
-					.getResource(INTERNAL_ACOTA_PERSISTENCE_PROPERTIES_PATH)));
-		} catch (ConfigurationException e) {
-			throw new AcotaConfigurationException(e);
-		}
 	}
 
 }

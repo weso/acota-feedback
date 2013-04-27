@@ -25,7 +25,7 @@ import es.weso.acota.core.entity.ProviderTO;
 import es.weso.acota.core.entity.TagTO;
 import es.weso.acota.core.entity.persistence.tables.FeedbackTable;
 import es.weso.acota.core.exceptions.AcotaConfigurationException;
-import es.weso.acota.core.utils.lang.LanguageUtil;
+import es.weso.acota.core.utils.lang.LanguageDetector;
 import es.weso.acota.persistence.LabelDAO;
 import es.weso.acota.persistence.factory.FactoryDAO;
 
@@ -41,10 +41,11 @@ import es.weso.acota.persistence.factory.FactoryDAO;
 public class LabelRecommenderEnhancer extends EnhancerAdapter implements FeedbackConfigurable{
 
 	protected LabelDAO labelDao;
+	protected LanguageDetector languageDetector;
 	
 	protected int numRecommendations;
 	protected double relevance;
-
+	
 	protected FeedbackConfiguration configuration;
 
 	/**
@@ -83,6 +84,7 @@ public class LabelRecommenderEnhancer extends EnhancerAdapter implements Feedbac
 				"Label Recommender Enhancer");
 		loadConfiguration(configuration);
 		this.labelDao = FactoryDAO.createLabelDAO();
+		this.languageDetector = LanguageDetector.getInstance(configuration);
 	}
 	
 	@Override
@@ -194,7 +196,7 @@ public class LabelRecommenderEnhancer extends EnhancerAdapter implements Feedbac
 	 * occurs while initializing a Configuration object
 	 */
 	protected void handleRecommendLabel(String label) throws AcotaConfigurationException {
-		TagTO tag = new TagTO(label,LanguageUtil.detect(label),
+		TagTO tag = new TagTO(label, languageDetector.detect(label),
 				provider,request.getResource());
 		fillSuggestions(tag, relevance);
 	}
