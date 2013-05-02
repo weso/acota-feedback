@@ -1,5 +1,9 @@
 package es.weso.acota.core.utils.mahout;
 
+import static es.weso.acota.persistence.DBMS.DB_MYSQL;
+import static es.weso.acota.persistence.DBMS.DB_MARIADB;
+import static es.weso.acota.persistence.DBMS.DB_POSTGRESQL;
+import static es.weso.acota.persistence.DBMS.DB_MONGODB;
 
 import java.net.UnknownHostException;
 
@@ -16,6 +20,7 @@ import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
 import es.weso.acota.core.FeedbackConfiguration;
 import es.weso.acota.core.entity.persistence.tables.FeedbackTable;
 import es.weso.acota.core.exceptions.AcotaPersistenceException;
+import es.weso.acota.persistence.DBMS;
 
 /**
  * Loads a DataModel for the specific DBMS (MySQL, PostgreSQL or MongoDB=
@@ -23,10 +28,6 @@ import es.weso.acota.core.exceptions.AcotaPersistenceException;
  *
  */
 public class DataModelUtil {
-	
-	public static final String DB_MYSQL = "mysql";
-	public static final String DB_POSTGRESQL = "postgresql";
-	public static final String DB_MONGODB = "mongodb";
 	
 	/**
 	 * Returns a repository of information for the default DBMS
@@ -63,7 +64,7 @@ public class DataModelUtil {
 	 */
 	protected static DataModel selectDataModel(FeedbackConfiguration configuration) throws NumberFormatException, UnknownHostException, MongoException, AcotaPersistenceException{
 		String type = configuration.getDatabaseType();
-		if(type.equals(DB_MYSQL)){
+		if(type.equals(DB_MYSQL) || type.equals(DB_MARIADB)){
 				return loadMySQLDataModel(configuration);
 		}else if(type.equals(DB_POSTGRESQL)){
 				return loadPostgreSQLModel(configuration);
@@ -84,7 +85,8 @@ public class DataModelUtil {
 	 */
 	protected static DataModel loadMongoDBDataModel(FeedbackConfiguration configuration) throws NumberFormatException, UnknownHostException, MongoException{
 		FeedbackTable feedback = configuration.getFeedbackTable();
-		return new MongoDBDataModel(configuration.getDatabaseUrl(),Integer.valueOf(configuration.getDatabasePort()),
+		
+		return new MongoDBDataModel(configuration.getDatabaseUrl(),getPort(configuration.getDatabasePort(), DBMS.DB_MONGODB_PORT),
 				configuration.getDatabaseName(),configuration.getDatabasePrefix()+feedback.getName(),
 				true, true, null);
 	}
@@ -97,7 +99,7 @@ public class DataModelUtil {
 	protected static DataModel loadMySQLDataModel(FeedbackConfiguration configuration){
 		MysqlDataSource dataSource = new MysqlDataSource();
 		dataSource.setServerName(configuration.getDatabaseUrl());
-		dataSource.setPort(Integer.parseInt(configuration.getDatabasePort()));
+		dataSource.setPort(getPort(configuration.getDatabasePort(), DBMS.DB_MYSQL_PORT));
 		dataSource.setUser(configuration.getDatabaseUser());
 		dataSource.setPassword(configuration.getDatabasePassword());
 		dataSource.setDatabaseName(configuration.getDatabaseName());
@@ -119,7 +121,7 @@ public class DataModelUtil {
 	protected static DataModel loadPostgreSQLModel(FeedbackConfiguration configuration){
 		PGSimpleDataSource dataSource = new PGSimpleDataSource();
 		dataSource.setServerName(configuration.getDatabaseUrl());
-		dataSource.setPortNumber(Integer.parseInt(configuration.getDatabasePort()));
+		dataSource.setPortNumber(getPort(configuration.getDatabasePort(), DBMS.DB_POSTGRESQL_PORT));
 		dataSource.setUser(configuration.getDatabaseUser());
 		dataSource.setPassword(configuration.getDatabasePassword());
 		dataSource.setDatabaseName(configuration.getDatabaseName());
@@ -131,5 +133,9 @@ public class DataModelUtil {
 				configuration.getDatabasePrefix()+feedback.getName(), feedback.getDocumentIdAttribute(),
 				feedback.getLabelIdAttribute(), feedback.getPreferenceAttribute(),
 				feedback.getTimestampAttribute());
+	}
+	
+	protected static int getPort(String port, String defaultPort){
+		return Integer.parseInt(port.isEmpty() ? defaultPort : port);
 	}
 }

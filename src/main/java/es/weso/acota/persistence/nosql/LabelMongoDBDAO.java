@@ -38,10 +38,13 @@ public class LabelMongoDBDAO extends GenericMongoDBDAO implements LabelDAO {
 	 * Zero-argument default constructor
 	 * @throws AcotaConfigurationException Any exception that occurs while initializing 
 	 * a Configuration object
+	 * @throws AcotaPersistenceException  An exception that provides information on a
+	 * database access error or other errors.
 	 */
-	public LabelMongoDBDAO() throws AcotaConfigurationException{
+	public LabelMongoDBDAO() throws AcotaConfigurationException, AcotaPersistenceException{
 		super();
 		loadConfiguration(configuration);
+		this.db = MongoDBDAO.getInstance(configuration).getDb();
 	}
 	
 	/** 

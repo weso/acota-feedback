@@ -1,5 +1,10 @@
 package es.weso.acota.core;
 
+import static es.weso.acota.persistence.DBMS.DB_MYSQL;
+import static es.weso.acota.persistence.DBMS.DB_MARIADB;
+import static es.weso.acota.persistence.DBMS.DB_POSTGRESQL;
+import static es.weso.acota.persistence.DBMS.DB_MONGODB;
+
 import org.apache.commons.configuration.CompositeConfiguration;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
@@ -102,6 +107,13 @@ public class FeedbackConfiguration extends SeedConfiguration implements Configur
 	}
 
 	public void setDatabaseType(String databaseType) {
+		if(databaseType.equals(DB_MYSQL) || databaseType.equals(DB_MARIADB)){
+			this.databaseType = DB_MYSQL;
+		}else if(databaseType.equals(DB_POSTGRESQL)){
+			this.databaseType = DB_POSTGRESQL;
+		}else if(databaseType.equals(DB_MONGODB)){
+			this.databaseType = DB_MONGODB;
+		}
 		this.databaseType = databaseType;
 	}
 

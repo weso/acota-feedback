@@ -100,7 +100,7 @@ public class LabelSQLDAO extends GenericSQLDAO implements LabelDAO {
 
 			StringBuilder query = new StringBuilder("select * from ")
 					.append(tableName).append(" where ").append(idAttribute)
-					.append("=?");
+					.append(" = ?");
 
 			ps = con.prepareStatement(query.toString());
 			ps.setInt(1, id);

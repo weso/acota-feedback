@@ -10,6 +10,7 @@ import es.weso.acota.core.FeedbackConfiguration;
 import es.weso.acota.core.business.enhancer.FeedbackConfigurable;
 import es.weso.acota.core.exceptions.AcotaConfigurationException;
 import es.weso.acota.core.exceptions.AcotaPersistenceException;
+import es.weso.acota.persistence.DBMS;
 
 /**
  * MongoDB Connection keeper
@@ -35,15 +36,18 @@ public class MongoDBDAO implements FeedbackConfigurable {
 		super();
 		loadConfiguration(configuration);
 		try {
+			String port = configuration.getDatabasePort();
+			port = port.isEmpty() ? DBMS.DB_MONGODB_PORT : port;
+			
 			connection = new Mongo(configuration.getDatabaseUrl(),
-					Integer.valueOf(configuration.getDatabasePort()));
+					Integer.valueOf(port));
 			db = connection.getDB(configuration.getDatabaseName());
 			
 			System.out.println(db.isAuthenticated());
-			if (!db.isAuthenticated()) {
+			/*if (!db.isAuthenticated()) {
 				db.authenticate(configuration.getDatabaseUser(), configuration
 						.getDatabasePassword().toCharArray());
-			}
+			}*/
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
 			throw new AcotaPersistenceException(e);

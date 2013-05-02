@@ -10,6 +10,7 @@ import java.sql.SQLException;
 import es.weso.acota.core.FeedbackConfiguration;
 import es.weso.acota.core.exceptions.AcotaConfigurationException;
 import es.weso.acota.core.exceptions.AcotaPersistenceException;
+import es.weso.acota.persistence.DBMS;
 import es.weso.acota.persistence.GenericDAO;
 
 /**
@@ -37,8 +38,8 @@ public abstract class GenericSQLDAO implements GenericDAO {
 		if(configuration==null)
 			configuration = new FeedbackConfiguration();
 		this.configuration = configuration;
-		this.url = new StringBuilder("jdbc:mysql://")
-		.append(configuration.getDatabaseUrl()).append(":").append(configuration.getDatabasePort()).append("/")
+		this.url = new StringBuilder("jdbc:").append(configuration.getDatabaseType().trim()).append("://")
+		.append(configuration.getDatabaseUrl()).append(":").append(getPort(configuration)).append("/")
 		.append(configuration.getDatabaseName()).toString();
 	}
 	
@@ -50,7 +51,8 @@ public abstract class GenericSQLDAO implements GenericDAO {
 	 */
 	public Connection openConnection() throws AcotaPersistenceException {
 		try{
-		Class.forName("com.mysql.jdbc.Driver");
+		Class.forName(configuration.getDatabaseType().equals("mysql") 
+				? "com.mysql.jdbc.Driver":"org.postgresql.Driver");
 		return DriverManager.getConnection(url,
 				configuration.getDatabaseUser(),
 				configuration.getDatabasePassword());
@@ -109,5 +111,22 @@ public abstract class GenericSQLDAO implements GenericDAO {
 			e.printStackTrace();
 			throw new AcotaPersistenceException(e);
 		}
+	}
+	
+	protected static int getPort(FeedbackConfiguration configuration){
+		String port = configuration.getDatabasePort();
+		if(port.isEmpty()){
+			String type = configuration.getDatabaseType();
+			if(type.equals(DBMS.DB_MYSQL)){
+				port = DBMS.DB_MYSQL_PORT;
+			}else if(type.equals(DBMS.DB_MARIADB))
+			{
+				port = DBMS.DB_MARIADB_PORT;
+			}else if(type.equals(DBMS.DB_POSTGRESQL))
+			{
+				port = DBMS.DB_POSTGRESQL_PORT;
+			}
+		}
+		return Integer.parseInt(port);
 	}
 }
