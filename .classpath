@@ -23,7 +23,6 @@
   <classpathentry kind="var" path="M2_REPO/commons-io/commons-io/2.4/commons-io-2.4.jar"/>
   <classpathentry kind="var" path="M2_REPO/com/cybozu/labs/langdetect/1.1-20120112/langdetect-1.1-20120112.jar"/>
   <classpathentry kind="var" path="M2_REPO/net/arnx/jsonic/1.2.7/jsonic-1.2.7.jar"/>
-  <classpathentry kind="var" path="M2_REPO/mysql/mysql-connector-java/5.1.22/mysql-connector-java-5.1.22.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/apache/mahout/mahout-core/0.7/mahout-core-0.7.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/apache/mahout/mahout-math/0.7/mahout-math-0.7.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/apache/commons/commons-math/2.2/commons-math-2.2.jar"/>
@@ -80,4 +79,6 @@
   <classpathentry kind="var" path="M2_REPO/org/slf4j/jul-to-slf4j/1.6.1/jul-to-slf4j-1.6.1.jar"/>
   <classpathentry kind="var" path="M2_REPO/com/github/stephenc/eaio-uuid/uuid/3.2.0/uuid-3.2.0.jar"/>
   <classpathentry kind="var" path="M2_REPO/com/ecyrd/speed4j/speed4j/0.9/speed4j-0.9.jar"/>
+  <classpathentry kind="var" path="M2_REPO/mysql/mysql-connector-java/5.1.22/mysql-connector-java-5.1.22.jar"/>
+  <classpathentry kind="var" path="M2_REPO/postgresql/postgresql/9.1-901.jdbc4/postgresql-9.1-901.jdbc4.jar"/>
 </classpath>

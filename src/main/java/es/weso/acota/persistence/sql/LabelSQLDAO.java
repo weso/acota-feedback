@@ -1,4 +1,4 @@
-package es.weso.acota.persistence.mysql;
+package es.weso.acota.persistence.sql;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -11,17 +11,19 @@ import java.util.List;
 import java.util.Set;
 
 
+import es.weso.acota.core.FeedbackConfiguration;
 import es.weso.acota.core.entity.persistence.tables.LabelTable;
 import es.weso.acota.core.exceptions.AcotaConfigurationException;
+import es.weso.acota.core.exceptions.AcotaPersistenceException;
 import es.weso.acota.persistence.LabelDAO;
 
 /**
- * Concrete implementation of LabelDAO for the DBMS MySQL 5.x
+ * Concrete implementation of LabelDAO for relational DBMSs
+ * @see GenericSQLDAO
  * @see LabelDAO
  * @author César Luis Alvargonzález
- *
  */
-public class LabelMysqlDAO extends GenericMysqlDAO implements LabelDAO {
+public class LabelSQLDAO extends GenericSQLDAO implements LabelDAO {
 
 	protected String tableName;
 	protected String idAttribute;
@@ -32,17 +34,34 @@ public class LabelMysqlDAO extends GenericMysqlDAO implements LabelDAO {
 	 * @throws AcotaConfigurationException Any exception that occurs while initializing 
 	 * a Configuration object
 	 */
-	public LabelMysqlDAO() throws AcotaConfigurationException  {
+	public LabelSQLDAO() throws AcotaConfigurationException  {
 		super();
-		LabelTable label = configuration.getLabelTuple();
-		this.tableName = configuration.getDatabasePrefix()+label.getName();
+		loadConfiguration(configuration);
+	}
+	
+	/**
+	 * One-argument constructor
+	 * @param configuration Acota-feedback's configuration class
+	 * @throws AcotaConfigurationException Any exception that occurs while initializing 
+	 * a Configuration object
+	 */
+	public LabelSQLDAO(FeedbackConfiguration configuration) throws AcotaConfigurationException  {
+		super();
+		loadConfiguration(configuration);
+	}
+	
+	@Override
+	public void loadConfiguration(FeedbackConfiguration configuration)
+			throws AcotaConfigurationException {
+		super.loadConfiguration(configuration);
+		LabelTable label = this.configuration.getLabelTable();
+		this.tableName = this.configuration.getDatabasePrefix()+label.getName();
 		this.idAttribute = label.getIdAttribute();
 		this.nameAttribute = label.getNameAttribute();
 	}
 
 	@Override
-	public void saveLabel(Integer id, String label) throws SQLException,
-			ClassNotFoundException {
+	public void saveLabel(Integer id, String label) throws AcotaPersistenceException {
 		PreparedStatement ps = null;
 		Connection con = null;
 
@@ -59,18 +78,17 @@ public class LabelMysqlDAO extends GenericMysqlDAO implements LabelDAO {
 
 			ps.executeUpdate();
 
-		} catch (ClassNotFoundException e) {
-			throw e;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new AcotaPersistenceException(e);
 		} finally {
 			closeStatement(ps);
 			closeConnection(con);
-
 		}
 	}
 
 	@Override
-	public String getLabelById(Integer id) throws SQLException,
-			ClassNotFoundException {
+	public String getLabelById(Integer id) throws AcotaPersistenceException {
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		Connection con = null;
@@ -93,8 +111,9 @@ public class LabelMysqlDAO extends GenericMysqlDAO implements LabelDAO {
 				labels = rs.getString(nameAttribute);
 			}
 
-		} catch (ClassNotFoundException e) {
-			throw e;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new AcotaPersistenceException(e);
 		} finally {
 			closeResult(rs);
 			closeStatement(ps);
@@ -105,14 +124,12 @@ public class LabelMysqlDAO extends GenericMysqlDAO implements LabelDAO {
 	}
 
 	@Override
-	public String getLabelByHash(Integer hash) throws SQLException,
-			ClassNotFoundException {
-		return getLabelById(hash);
+	public String getLabelByHash(Integer hashCode) throws AcotaPersistenceException {
+		return getLabelById(hashCode);
 	}
 
 	@Override
-	public Set<String> getLabelsByIds(Collection<Integer> ids)
-			throws SQLException, ClassNotFoundException {
+	public Set<String> getLabelsByIds(Collection<Integer> ids) throws AcotaPersistenceException {
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		Connection con = null;
@@ -145,8 +162,9 @@ public class LabelMysqlDAO extends GenericMysqlDAO implements LabelDAO {
 					labels.add(rs.getString(nameAttribute));
 				}
 
-			} catch (ClassNotFoundException e) {
-				throw e;
+			} catch (SQLException e) {
+				e.printStackTrace();
+				throw new AcotaPersistenceException(e);
 			} finally {
 				closeResult(rs);
 				closeStatement(ps);
@@ -157,8 +175,8 @@ public class LabelMysqlDAO extends GenericMysqlDAO implements LabelDAO {
 	}
 
 	@Override
-	public Set<String> getLabelsByHashCodes(Collection<Integer> hashes)
-			throws SQLException, ClassNotFoundException {
+	public Set<String> getLabelsByHashCodes(Collection<Integer> hashes) 
+			throws AcotaPersistenceException {
 		return getLabelsByIds(hashes);
 	}
 

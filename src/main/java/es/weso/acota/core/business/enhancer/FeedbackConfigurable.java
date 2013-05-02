@@ -16,7 +16,7 @@ public interface FeedbackConfigurable {
 	 * Loads the configuration into the class that implements this interface
 	 * 
 	 * @param configuration
-	 *            Acota-core's feedback class
+	 *            Acota-feedback's configuration class
 	 * @throws AcotaConfigurationException 
 	 *             Any exception that occurs while initializing a Configuration
 	 *             object

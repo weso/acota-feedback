@@ -30,6 +30,7 @@ public class FeedbackConfiguration extends SeedConfiguration implements Configur
 	protected String feedbackDAOClass;
 	protected String labelDAOClass;
 
+	protected String databaseType;
 	protected String databaseUrl;
 	protected String databasePort;
 	protected String databaseName;
@@ -37,9 +38,9 @@ public class FeedbackConfiguration extends SeedConfiguration implements Configur
 	protected String databasePassword;
 	protected String databasePrefix;
 
-	protected DocumentTable documentTuple;
-	protected FeedbackTable feedbackTuple;
-	protected LabelTable labelTuple;
+	protected DocumentTable documentTable;
+	protected FeedbackTable feedbackTable;
+	protected LabelTable labelTable;
 
 	protected double simpleRecommenderRelevance;
 
@@ -96,6 +97,14 @@ public class FeedbackConfiguration extends SeedConfiguration implements Configur
 		this.labelDAOClass = labelDAOClass;
 	}
 
+	public String getDatabaseType() {
+		return databaseType;
+	}
+
+	public void setDatabaseType(String databaseType) {
+		this.databaseType = databaseType;
+	}
+
 	public String getDatabaseUrl() {
 		return databaseUrl;
 	}
@@ -144,28 +153,28 @@ public class FeedbackConfiguration extends SeedConfiguration implements Configur
 		this.databasePrefix = databasePrefix;
 	}
 	
-	public DocumentTable getDocumentTuple() {
-		return documentTuple;
+	public DocumentTable getDocumentTable() {
+		return documentTable;
 	}
 
-	public void setDocumentTuple(DocumentTable documentTuple) {
-		this.documentTuple = documentTuple;
+	public void setDocumentTable(DocumentTable documentTable) {
+		this.documentTable = documentTable;
 	}
 
-	public FeedbackTable getFeedbackTuple() {
-		return feedbackTuple;
+	public FeedbackTable getFeedbackTable() {
+		return feedbackTable;
 	}
 
-	public void setFeedbackTuple(FeedbackTable feedbackTuple) {
-		this.feedbackTuple = feedbackTuple;
+	public void setFeedbackTable(FeedbackTable feedbackTable) {
+		this.feedbackTable = feedbackTable;
 	}
 
-	public LabelTable getLabelTuple() {
-		return labelTuple;
+	public LabelTable getLabelTable() {
+		return labelTable;
 	}
 
-	public void setLabelTuple(LabelTable labelTuple) {
-		this.labelTuple = labelTuple;
+	public void setLabelTable(LabelTable labelTable) {
+		this.labelTable = labelTable;
 	}
 
 	public double getSimpleRecommenderRelevance() {
@@ -218,6 +227,7 @@ public class FeedbackConfiguration extends SeedConfiguration implements Configur
 	 * Loads the Database CONFIGuration properties
 	 */
 	private void loadDatabaseConfig() {
+		this.databaseType = CONFIG.getString("database.type");
 		this.databaseUrl = CONFIG.getString("database.url");
 		this.databasePort = CONFIG.getString("database.port");
 		this.databaseName = CONFIG.getString("database.name");
@@ -230,29 +240,30 @@ public class FeedbackConfiguration extends SeedConfiguration implements Configur
 	 * Loads the Document Table properties
 	 */
 	private void loadDocumentConfig() {
-		this.documentTuple = new DocumentTable();
-		documentTuple.setName(CONFIG.getString("database.document"));
-		documentTuple.setIdAttribute(CONFIG.getString("database.document.id"));
-		documentTuple.setNameAttribute(CONFIG
+		this.documentTable = new DocumentTable();
+		documentTable.setName(CONFIG.getString("database.document"));
+		documentTable.setIdAttribute(CONFIG.getString("database.document.id"));
+		documentTable.setNameAttribute(CONFIG
 				.getString("database.document.name"));
+		documentTable.setTimestampAttribute(CONFIG.getString("database.document.timestamp"));
 	}
 
 	/**
 	 * Loads the Feedback Table properties
 	 */
 	private void loadFeedbackConfig() {
-		this.feedbackTuple = new FeedbackTable();
-		feedbackTuple.setName(CONFIG.getString("database.feedback"));
-		feedbackTuple.setIdAttribute(CONFIG.getString("database.feedback.id"));
-		feedbackTuple.setUserIdAttribute(CONFIG
+		this.feedbackTable = new FeedbackTable();
+		feedbackTable.setName(CONFIG.getString("database.feedback"));
+		feedbackTable.setIdAttribute(CONFIG.getString("database.feedback.id"));
+		feedbackTable.setUserIdAttribute(CONFIG
 				.getString("database.feedback.userId"));
-		feedbackTuple.setDocumentIdAttribute(CONFIG
+		feedbackTable.setDocumentIdAttribute(CONFIG
 				.getString("database.feedback.document"));
-		feedbackTuple.setLabelIdAttribute(CONFIG
+		feedbackTable.setLabelIdAttribute(CONFIG
 				.getString("database.feedback.label"));
-		feedbackTuple.setPreferenceAttribute(CONFIG
+		feedbackTable.setPreferenceAttribute(CONFIG
 				.getString("database.feedback.preference"));
-		feedbackTuple.setTimestampAttribute(CONFIG
+		feedbackTable.setTimestampAttribute(CONFIG
 				.getString("database.feedback.timestamp"));
 	}
 
@@ -260,10 +271,11 @@ public class FeedbackConfiguration extends SeedConfiguration implements Configur
 	 * Loads the Label Table properties
 	 */
 	private void loadLabelConfig() {
-		this.labelTuple = new LabelTable();
-		labelTuple.setName(CONFIG.getString("database.label"));
-		labelTuple.setIdAttribute(CONFIG.getString("database.label.id"));
-		labelTuple.setNameAttribute(CONFIG.getString("database.label.name"));
+		this.labelTable = new LabelTable();
+		labelTable.setName(CONFIG.getString("database.label"));
+		labelTable.setIdAttribute(CONFIG.getString("database.label.id"));
+		labelTable.setNameAttribute(CONFIG.getString("database.label.name"));
+		labelTable.setTimestampAttribute(CONFIG.getString("database.label.timestamp"));
 	}
 
 	/**

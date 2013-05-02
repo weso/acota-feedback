@@ -4,7 +4,6 @@ import static org.junit.Assert.assertEquals;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.SQLException;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
@@ -22,8 +21,9 @@ import org.junit.Before;
 import org.junit.Test;
 
 import es.weso.acota.core.FeedbackConfiguration;
+import es.weso.acota.core.exceptions.AcotaPersistenceException;
 import es.weso.acota.persistence.LabelDAO;
-import es.weso.acota.persistence.mysql.LabelMysqlDAO;
+import es.weso.acota.persistence.sql.LabelSQLDAO;
 
 public class LabelMysqlDAOTest {
 	
@@ -32,7 +32,7 @@ public class LabelMysqlDAOTest {
 	@Before
 	public void init() throws Exception {
 		DatabaseOperation.CLEAN_INSERT.execute(getConnection(), getDataSet());
-		this.labelDao = new LabelMysqlDAO(); 
+		this.labelDao = new LabelSQLDAO(); 
 	}
 
 	@After
@@ -79,32 +79,32 @@ public class LabelMysqlDAOTest {
 	}
 	
 	@Test
-	public void getLabelByIdThatNotExists() throws SQLException, ClassNotFoundException{
+	public void getLabelByIdThatNotExists() throws AcotaPersistenceException {
 		assertEquals(null, labelDao.getLabelById(1000));
 	}
 	
 	@Test
-	public void getLabelByIdTest() throws SQLException, ClassNotFoundException{
+	public void getLabelByIdTest() throws AcotaPersistenceException {
 		assertEquals("group", labelDao.getLabelById(98629247));
 	}
 	
 	@Test
-	public void getLabelByHashThatNotExists() throws SQLException, ClassNotFoundException{
+	public void getLabelByHashThatNotExists() throws AcotaPersistenceException {
 		assertEquals(null, labelDao.getLabelByHash(1000));
 	}
 	
 	@Test
-	public void getLabelByHashTest() throws SQLException, ClassNotFoundException{
+	public void getLabelByHashTest() throws AcotaPersistenceException {
 		assertEquals("group", labelDao.getLabelByHash(98629247));
 	}
 	
 	@Test
-	public void getLabelsByIdsEmpty() throws SQLException, ClassNotFoundException{
+	public void getLabelsByIdsEmpty() throws AcotaPersistenceException {
 		assertEquals(Collections.EMPTY_SET, labelDao.getLabelsByIds(Collections.<Integer> emptySet()));
 	}
 	
 	@Test
-	public void getLabelsByIdsThatNotExist() throws SQLException, ClassNotFoundException{
+	public void getLabelsByIdsThatNotExist() throws AcotaPersistenceException {
 		Set<Integer> ids = new HashSet<Integer>();
 		ids.add(9238424);
 		ids.add(93247);
@@ -112,7 +112,7 @@ public class LabelMysqlDAOTest {
 	}
 	
 	@Test
-	public void getLabelsByIdsTest() throws SQLException, ClassNotFoundException{
+	public void getLabelsByIdsTest() throws AcotaPersistenceException {
 		Set<String> labels = new HashSet<String>();
 		labels.add("group");
 		labels.add("research");
@@ -124,12 +124,12 @@ public class LabelMysqlDAOTest {
 	}
 	
 	@Test
-	public void getLabelsByHashesEmpty() throws SQLException, ClassNotFoundException{
+	public void getLabelsByHashesEmpty() throws AcotaPersistenceException {
 		assertEquals(Collections.EMPTY_SET, labelDao.getLabelsByHashCodes(Collections.<Integer> emptySet()));
 	}
 	
 	@Test
-	public void getLabelsByHashesThatNotExist() throws SQLException, ClassNotFoundException{
+	public void getLabelsByHashesThatNotExist() throws AcotaPersistenceException {
 		Set<Integer> hashes = new HashSet<Integer>();
 		hashes.add(9238424);
 		hashes.add(93247);
@@ -137,7 +137,7 @@ public class LabelMysqlDAOTest {
 	}
 	
 	@Test
-	public void getLabelsByHashesTest() throws SQLException, ClassNotFoundException{
+	public void getLabelsByHashesTest() throws AcotaPersistenceException {
 		Set<String> labels = new HashSet<String>();
 		labels.add("group");
 		labels.add("research");

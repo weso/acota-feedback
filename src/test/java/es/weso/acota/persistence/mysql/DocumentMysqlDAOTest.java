@@ -4,7 +4,6 @@ import static org.junit.Assert.assertEquals;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.SQLException;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
@@ -22,8 +21,9 @@ import org.junit.Before;
 import org.junit.Test;
 
 import es.weso.acota.core.FeedbackConfiguration;
+import es.weso.acota.core.exceptions.AcotaPersistenceException;
 import es.weso.acota.persistence.DocumentDAO;
-import es.weso.acota.persistence.mysql.DocumentMysqlDAO;
+import es.weso.acota.persistence.sql.DocumentSQLDAO;
 
 public class DocumentMysqlDAOTest {
 	
@@ -32,7 +32,7 @@ public class DocumentMysqlDAOTest {
 	@Before
 	public void init() throws Exception {
 		DatabaseOperation.CLEAN_INSERT.execute(getConnection(), getDataSet());
-		this.documentDao = new DocumentMysqlDAO(); 
+		this.documentDao = new DocumentSQLDAO(); 
 	}
 
 	@After
@@ -79,32 +79,32 @@ public class DocumentMysqlDAOTest {
 	}
 	
 	@Test
-	public void getDocumentByIdThatNotExists() throws SQLException, ClassNotFoundException{
+	public void getDocumentByIdThatNotExists() throws AcotaPersistenceException {
 		assertEquals(null, documentDao.getDocumentById(1000));
 	}
 	
 	@Test
-	public void getDocumentByIdTest() throws SQLException, ClassNotFoundException{
+	public void getDocumentByIdTest() throws AcotaPersistenceException {
 		assertEquals("http://www.weso.es", documentDao.getDocumentById(-220345143));
 	}
 	
 	@Test
-	public void getDocumentByHashThatNotExists() throws SQLException, ClassNotFoundException{
+	public void getDocumentByHashThatNotExists() throws AcotaPersistenceException {
 		assertEquals(null, documentDao.getDocumentByHashCode(1000));
 	}
 	
 	@Test
-	public void getDocumentByHashTest() throws SQLException, ClassNotFoundException{
+	public void getDocumentByHashTest() throws AcotaPersistenceException {
 		assertEquals("http://www.weso.es", documentDao.getDocumentByHashCode(-220345143));
 	}
 	
 	@Test
-	public void getDocumentsByIdsEmpty() throws SQLException, ClassNotFoundException{
+	public void getDocumentsByIdsEmpty() throws AcotaPersistenceException {
 		assertEquals(Collections.EMPTY_SET, documentDao.getDocumentsByIds(Collections.<Integer> emptySet()));
 	}
 	
 	@Test
-	public void getDocumentsByIdsThatNotExist() throws SQLException, ClassNotFoundException{
+	public void getDocumentsByIdsThatNotExist() throws AcotaPersistenceException {
 		Set<Integer> ids = new HashSet<Integer>();
 		ids.add(9238424);
 		ids.add(93247);
@@ -112,7 +112,7 @@ public class DocumentMysqlDAOTest {
 	}
 	
 	@Test
-	public void getDocumentsByIdsTest() throws SQLException, ClassNotFoundException{
+	public void getDocumentsByIdsTest()  throws AcotaPersistenceException {
 		Set<String> Documents = new HashSet<String>();
 		Documents.add("http://www.weso.es");
 		Documents.add("http://www.example.es");
@@ -124,12 +124,12 @@ public class DocumentMysqlDAOTest {
 	}
 	
 	@Test
-	public void getDocumentsByHashesEmpty() throws SQLException, ClassNotFoundException{
+	public void getDocumentsByHashesEmpty() throws AcotaPersistenceException {
 		assertEquals(Collections.EMPTY_SET, documentDao.getDocumentsByHashCodes(Collections.<Integer> emptySet()));
 	}
 	
 	@Test
-	public void getDocumentsByHashesThatNotExist() throws SQLException, ClassNotFoundException{
+	public void getDocumentsByHashesThatNotExist() throws AcotaPersistenceException {
 		Set<Integer> hashes = new HashSet<Integer>();
 		hashes.add(9238424);
 		hashes.add(93247);
@@ -137,7 +137,7 @@ public class DocumentMysqlDAOTest {
 	}
 	
 	@Test
-	public void getDocumentsByHashesTest() throws SQLException, ClassNotFoundException{
+	public void getDocumentsByHashesTest() throws AcotaPersistenceException {
 		Set<String> Documents = new HashSet<String>();
 		Documents.add("http://www.weso.es");
 		Documents.add("http://www.example.es");

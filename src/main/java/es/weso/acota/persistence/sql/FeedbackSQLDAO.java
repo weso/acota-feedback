@@ -1,4 +1,4 @@
-package es.weso.acota.persistence.mysql;
+package es.weso.acota.persistence.sql;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -7,22 +7,22 @@ import java.sql.SQLException;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.apache.commons.configuration.ConfigurationException;
-
+import es.weso.acota.core.FeedbackConfiguration;
 import es.weso.acota.core.entity.persistence.Feedback;
 import es.weso.acota.core.entity.persistence.tables.DocumentTable;
 import es.weso.acota.core.entity.persistence.tables.FeedbackTable;
 import es.weso.acota.core.entity.persistence.tables.LabelTable;
 import es.weso.acota.core.exceptions.AcotaConfigurationException;
+import es.weso.acota.core.exceptions.AcotaPersistenceException;
 import es.weso.acota.persistence.FeedbackDAO;
 
 /**
- * Concrete implementation of FeedbackDAO for the DBMS MySQL 5.x
+ * Concrete implementation of FeedbackDAO for relational DBMSs
+ * @see GenericSQLDAO
  * @see FeedbackDAO
  * @author César Luis Alvargonzález
- *
  */
-public class FeedbackMysqlDAO extends GenericMysqlDAO implements FeedbackDAO {
+public class FeedbackSQLDAO extends GenericSQLDAO implements FeedbackDAO {
 	
 	protected String documentTableName;
 	protected String documentIdAttribute;
@@ -42,18 +42,37 @@ public class FeedbackMysqlDAO extends GenericMysqlDAO implements FeedbackDAO {
 
 	/**
 	 * Zero-argument default constructor
-	 * @throws ConfigurationException Any exception that occurs while initializing 
+	 * @throws AcotaConfigurationException Any exception that occurs while initializing 
 	 * a Configuration object
 	 */
-	public FeedbackMysqlDAO() throws AcotaConfigurationException {
+	public FeedbackSQLDAO() throws AcotaConfigurationException {
 		super();
-		DocumentTable document = configuration.getDocumentTuple();
-		this.documentTableName = configuration.getDatabasePrefix()+document.getName();
+		loadConfiguration(configuration);
+	}
+
+	/** 
+	 * One-argument constructor
+	 * @param configuration Acota-feedback's this.configuration class
+	 * @throws AcotaConfigurationException Any exception that occurs while initializing 
+	 * a Configuration object
+	 */
+	public FeedbackSQLDAO(FeedbackConfiguration configuration) throws AcotaConfigurationException {
+		super();
+		loadConfiguration(this.configuration);
+	}
+	
+	@Override
+	public void loadConfiguration(FeedbackConfiguration configuration)
+			throws AcotaConfigurationException {
+		super.loadConfiguration(this.configuration);
+		
+		DocumentTable document = this.configuration.getDocumentTable();
+		this.documentTableName = this.configuration.getDatabasePrefix()+document.getName();
 		this.documentIdAttribute = document.getIdAttribute();
 		this.documentNameAttribute = document.getNameAttribute();
 
-		FeedbackTable feedback = configuration.getFeedbackTuple();
-		this.feedbackTableName = configuration.getDatabasePrefix()+feedback.getName();
+		FeedbackTable feedback = this.configuration.getFeedbackTable();
+		this.feedbackTableName = this.configuration.getDatabasePrefix()+feedback.getName();
 		this.feedbackIdAttribute = feedback.getIdAttribute();
 		this.feedbackUserIdAttribute = feedback.getUserIdAttribute();
 		this.feedbackDocumentIdAttribute = feedback.getDocumentIdAttribute();
@@ -61,15 +80,14 @@ public class FeedbackMysqlDAO extends GenericMysqlDAO implements FeedbackDAO {
 		this.feedbackPreferenceAttribute = feedback.getPreferenceAttribute();
 		this.feedbackTimestampAttribute = feedback.getTimestampAttribute();
 
-		LabelTable label = configuration.getLabelTuple();
-		this.labelTableName = configuration.getDatabasePrefix()+label.getName();
+		LabelTable label = this.configuration.getLabelTable();
+		this.labelTableName = this.configuration.getDatabasePrefix()+label.getName();
 		this.labelIdAttribute = label.getIdAttribute();
 		this.labelNameAttribute = label.getNameAttribute();
 	}
-
+	
 	@Override
-	public void saveFeedback(Feedback feedback) throws ClassNotFoundException,
-			SQLException {
+	public void saveFeedback(Feedback feedback) throws AcotaPersistenceException {
 		PreparedStatement ps = null;
 		Connection con = null;
 
@@ -80,17 +98,20 @@ public class FeedbackMysqlDAO extends GenericMysqlDAO implements FeedbackDAO {
 					.append(feedbackTableName).append(" (")
 					.append(feedbackUserIdAttribute).append(", ")
 					.append(feedbackDocumentIdAttribute).append(", ")
-					.append(feedbackLabelIdAttribute).append(") values(?,?,?)");
+					.append(feedbackPreferenceAttribute).append(", ")
+					.append(feedbackLabelIdAttribute).append(") values(?,?,?,?)");
 
 			ps = con.prepareStatement(query.toString());
 			ps.setInt(1, feedback.getUserId());
 			ps.setInt(2, feedback.getDocument().hashCode());
-			ps.setInt(3, feedback.getLabel().hashCode());
+			ps.setInt(3, feedback.getPreference());
+			ps.setInt(4, feedback.getLabel().hashCode());
 
 			ps.executeUpdate();
 
-		} catch (ClassNotFoundException e) {
-			throw e;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new AcotaPersistenceException(e);
 		} finally {
 			closeStatement(ps);
 			closeConnection(con);
@@ -99,8 +120,7 @@ public class FeedbackMysqlDAO extends GenericMysqlDAO implements FeedbackDAO {
 	}
 
 	@Override
-	public Set<Feedback> getAllFeedbacks() throws SQLException,
-			ClassNotFoundException {
+	public Set<Feedback> getAllFeedbacks() throws AcotaPersistenceException {
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		Connection con = null;
@@ -137,8 +157,9 @@ public class FeedbackMysqlDAO extends GenericMysqlDAO implements FeedbackDAO {
 				feedbacks.add(feedback);
 			}
 
-		} catch (ClassNotFoundException e) {
-			throw e;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new AcotaPersistenceException(e);
 		} finally {
 			closeResult(rs);
 			closeStatement(ps);
@@ -149,8 +170,7 @@ public class FeedbackMysqlDAO extends GenericMysqlDAO implements FeedbackDAO {
 	}
 
 	@Override
-	public Set<Feedback> getFeedbacksByUserId(int userId) throws SQLException,
-			ClassNotFoundException {
+	public Set<Feedback> getFeedbacksByUserId(int userId) throws AcotaPersistenceException {
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		Connection con = null;
@@ -189,8 +209,9 @@ public class FeedbackMysqlDAO extends GenericMysqlDAO implements FeedbackDAO {
 				feedbacks.add(feedback);
 			}
 
-		} catch (ClassNotFoundException e) {
-			throw e;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new AcotaPersistenceException(e);
 		} finally {
 			closeResult(rs);
 			closeStatement(ps);
@@ -201,8 +222,7 @@ public class FeedbackMysqlDAO extends GenericMysqlDAO implements FeedbackDAO {
 	}
 
 	@Override
-	public Set<Feedback> getFeedbacksByLabel(String label) throws SQLException,
-			ClassNotFoundException {
+	public Set<Feedback> getFeedbacksByLabel(String label) throws AcotaPersistenceException {
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		Connection con = null;
@@ -241,8 +261,9 @@ public class FeedbackMysqlDAO extends GenericMysqlDAO implements FeedbackDAO {
 				feedbacks.add(feedback);
 			}
 
-		} catch (ClassNotFoundException e) {
-			throw e;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new AcotaPersistenceException(e);
 		} finally {
 			closeResult(rs);
 			closeStatement(ps);
@@ -254,7 +275,7 @@ public class FeedbackMysqlDAO extends GenericMysqlDAO implements FeedbackDAO {
 
 	@Override
 	public Set<Feedback> getFeedbacksByDocument(String document)
-			throws SQLException, ClassNotFoundException {
+			throws AcotaPersistenceException {
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		Connection con = null;
@@ -293,8 +314,9 @@ public class FeedbackMysqlDAO extends GenericMysqlDAO implements FeedbackDAO {
 				feedbacks.add(feedback);
 			}
 
-		} catch (ClassNotFoundException e) {
-			throw e;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new AcotaPersistenceException(e);
 		} finally {
 			closeResult(rs);
 			closeStatement(ps);

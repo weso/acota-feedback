@@ -9,7 +9,8 @@ public class DocumentTable {
 	protected String name;
 	protected String idAttribute;
 	protected String nameAttribute;
-
+	protected String timestampAttribute;
+	
 	/**
 	 * Zero-argument default constructor.
 	 */
@@ -18,16 +19,18 @@ public class DocumentTable {
 	}
 
 	/**
-	 * Three-argument secondary constructor.
+	 * Four-argument secondary constructor.
 	 * @param name Name of the document table within the scheme
 	 * @param idAttribute Document's id attribute
 	 * @param nameAttribute Document's name attribute
+	 * @param timestampAttribute Document's Timestamp attribute
 	 */
-	public DocumentTable(String name, String idAttribute, String nameAttribute) {
+	public DocumentTable(String name, String idAttribute, String nameAttribute,String timestampAttribute) {
 		super();
 		this.name = name;
 		this.idAttribute = idAttribute;
 		this.nameAttribute = nameAttribute;
+		this.timestampAttribute = timestampAttribute;
 	}
 
 	public String getName() {
@@ -54,10 +57,19 @@ public class DocumentTable {
 		this.nameAttribute = nameAttribute;
 	}
 
+	public String getTimestampAttribute() {
+		return timestampAttribute;
+	}
+
+	public void setTimestampAttribute(String timestampAttribute) {
+		this.timestampAttribute = timestampAttribute;
+	}
+
 	@Override
 	public String toString() {
 		return "DocumentTable [name=" + name + ", idAttribute=" + idAttribute
-				+ ", nameAttribute=" + nameAttribute + "]";
+				+ ", nameAttribute=" + nameAttribute + ", timestampAttribute="
+				+ timestampAttribute + "]";
 	}
 
 }

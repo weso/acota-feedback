@@ -1,4 +1,4 @@
-package es.weso.acota.persistence.mysql;
+package es.weso.acota.persistence.sql;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -10,39 +10,57 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.commons.configuration.ConfigurationException;
-
+import es.weso.acota.core.FeedbackConfiguration;
 import es.weso.acota.core.entity.persistence.tables.DocumentTable;
 import es.weso.acota.core.exceptions.AcotaConfigurationException;
+import es.weso.acota.core.exceptions.AcotaPersistenceException;
 import es.weso.acota.persistence.DocumentDAO;
 
 /**
- * Concrete implementation of DocumentDAO for the DBMS MySQL 5.x
+ * Concrete implementation of DocumentDAO for relational DBMSs
+ * @see GenericSQLDAO
  * @see DocumentDAO
  * @author César Luis Alvargonzález
- *
  */
-public class DocumentMysqlDAO extends GenericMysqlDAO implements DocumentDAO {
+public class DocumentSQLDAO extends GenericSQLDAO implements DocumentDAO {
 	protected String tableName;
 	protected String idAttribute;
 	protected String nameAttribute;
 
 	/**
 	 * Zero-argument default constructor
-	 * @throws ConfigurationException Any exception that occurs while initializing 
+	 * @throws AcotaConfigurationException Any exception that occurs while initializing 
 	 * a Configuration object
 	 */
-	public DocumentMysqlDAO() throws AcotaConfigurationException {
+	public DocumentSQLDAO() throws AcotaConfigurationException {
 		super();
-		DocumentTable label = configuration.getDocumentTuple();
-		this.tableName = configuration.getDatabasePrefix()+label.getName();
+		loadConfiguration(configuration);
+	}
+	
+	/** 
+	 * One-argument constructor
+	 * @param configuration Acota-feedback's configuration class
+	 * @throws AcotaConfigurationException Any exception that occurs while initializing 
+	 * a Configuration object
+	 */
+	public DocumentSQLDAO(FeedbackConfiguration configuration) throws AcotaConfigurationException {
+		super();
+		loadConfiguration(configuration);
+	}
+	
+	@Override
+	public void loadConfiguration(FeedbackConfiguration configuration)
+			throws AcotaConfigurationException {
+		super.loadConfiguration(configuration);
+		
+		DocumentTable label = this.configuration.getDocumentTable();
+		this.tableName = this.configuration.getDatabasePrefix()+label.getName();
 		this.idAttribute = label.getIdAttribute();
 		this.nameAttribute = label.getNameAttribute();
 	}
 
 	@Override
-	public void saveDocument(Integer id, String document) throws SQLException,
-			ClassNotFoundException {
+	public void saveDocument(Integer id, String document) throws AcotaPersistenceException {
 		PreparedStatement ps = null;
 		Connection con = null;
 
@@ -59,8 +77,9 @@ public class DocumentMysqlDAO extends GenericMysqlDAO implements DocumentDAO {
 
 			ps.executeUpdate();
 
-		} catch (ClassNotFoundException e) {
-			throw e;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new AcotaPersistenceException(e);
 		} finally {
 			closeStatement(ps);
 			closeConnection(con);
@@ -69,8 +88,7 @@ public class DocumentMysqlDAO extends GenericMysqlDAO implements DocumentDAO {
 	}
 
 	@Override
-	public String getDocumentById(Integer id) throws SQLException,
-			ClassNotFoundException {
+	public String getDocumentById(Integer id) throws AcotaPersistenceException {
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		Connection con = null;
@@ -93,8 +111,9 @@ public class DocumentMysqlDAO extends GenericMysqlDAO implements DocumentDAO {
 				labels = rs.getString(nameAttribute);
 			}
 
-		} catch (ClassNotFoundException e) {
-			throw e;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new AcotaPersistenceException(e);
 		} finally {
 			closeResult(rs);
 			closeStatement(ps);
@@ -105,14 +124,13 @@ public class DocumentMysqlDAO extends GenericMysqlDAO implements DocumentDAO {
 	}
 
 	@Override
-	public String getDocumentByHashCode(Integer hash) throws SQLException,
-			ClassNotFoundException {
+	public String getDocumentByHashCode(Integer hash) throws AcotaPersistenceException {
 		return getDocumentById(hash);
 	}
 
 	@Override
 	public Set<String> getDocumentsByIds(Collection<Integer> ids)
-			throws SQLException, ClassNotFoundException {
+			throws AcotaPersistenceException {
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		Connection con = null;
@@ -145,8 +163,9 @@ public class DocumentMysqlDAO extends GenericMysqlDAO implements DocumentDAO {
 					documents.add(rs.getString(nameAttribute));
 				}
 
-			} catch (ClassNotFoundException e) {
-				throw e;
+			} catch (SQLException e) {
+				e.printStackTrace();
+				throw new AcotaPersistenceException(e);
 			} finally {
 				closeResult(rs);
 				closeStatement(ps);
@@ -158,7 +177,7 @@ public class DocumentMysqlDAO extends GenericMysqlDAO implements DocumentDAO {
 
 	@Override
 	public Set<String> getDocumentsByHashCodes(Collection<Integer> hashes)
-			throws SQLException, ClassNotFoundException {
+			throws AcotaPersistenceException {
 		return getDocumentsByIds(hashes);
 	}
 }

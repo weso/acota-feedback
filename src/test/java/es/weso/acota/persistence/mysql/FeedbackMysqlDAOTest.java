@@ -25,7 +25,7 @@ import org.junit.Test;
 import es.weso.acota.core.FeedbackConfiguration;
 import es.weso.acota.core.entity.persistence.Feedback;
 import es.weso.acota.persistence.FeedbackDAO;
-import es.weso.acota.persistence.mysql.FeedbackMysqlDAO;
+import es.weso.acota.persistence.sql.FeedbackSQLDAO;
 
 public class FeedbackMysqlDAOTest {
 
@@ -37,7 +37,7 @@ public class FeedbackMysqlDAOTest {
 		TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
 		
 		DatabaseOperation.CLEAN_INSERT.execute(getConnection(), getDataSet());
-		this.feedbackDao = new FeedbackMysqlDAO();
+		this.feedbackDao = new FeedbackSQLDAO();
 	}
 
 	@After
@@ -142,18 +142,4 @@ public class FeedbackMysqlDAOTest {
 				feedbackDao.getFeedbacksByDocument("http://www.example.es"));
 	}
 	
-	@Test
-	public void closeConnectionNullTest() throws Exception {
-		feedbackDao.closeConnection(null);
-	}
-	
-	@Test
-	public void closeResultnNullTest() throws Exception {
-		feedbackDao.closeResult(null);
-	}
-	
-	@Test
-	public void closeStatementNullTest() throws Exception {
-		feedbackDao.closeStatement(null);
-	}
 }

@@ -9,10 +9,14 @@ import java.util.Date;
  *
  */
 public class Feedback {
+	
+	public static final int DEFAULT_PREFERENCE = 1;
+	
 	protected int id;
 	protected int userId;
 	protected String label;
 	protected String document;
+	protected int preference = DEFAULT_PREFERENCE;
 	protected Date date;
 
 	/**
@@ -79,6 +83,14 @@ public class Feedback {
 		this.date = date;
 	}
 
+	public int getPreference() {
+		return preference;
+	}
+
+	public void setPreference(int preference) {
+		this.preference = preference;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -126,7 +138,8 @@ public class Feedback {
 	@Override
 	public String toString() {
 		return "Feedback [id=" + id + ", userId=" + userId + ", label=" + label
-				+ ", document=" + document + ", date=" + date + "]";
+				+ ", document=" + document + ", preference=" + preference
+				+ ", date=" + date + "]";
 	}
 
 }

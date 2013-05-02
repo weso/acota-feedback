@@ -25,12 +25,12 @@ public class FeedbackTable {
 	/**
 	 * Seven-argument constructor.
 	 * @param name Name of the feedback table within the scheme
-	 * @param idAttribute Id attribute
-	 * @param userIdAttribute User id attribute
-	 * @param documentIdAttribute Document attribute
-	 * @param labelIdAttribute Label attribute
-	 * @param preferenceAttribute Preference attribute
-	 * @param timestampAttribute Timestamp attribute
+	 * @param idAttribute Feedback's Id attribute
+	 * @param userIdAttribute User's id attribute
+	 * @param documentIdAttribute Document's id attribute
+	 * @param labelIdAttribute Label's id attribute
+	 * @param preferenceAttribute Feedback's Preference attribute
+	 * @param timestampAttribute Feedback's Timestamp attribute
 	 */
 	public FeedbackTable(String name, String idAttribute, String userIdAttribute,
 			String documentIdAttribute, String labelIdAttribute,

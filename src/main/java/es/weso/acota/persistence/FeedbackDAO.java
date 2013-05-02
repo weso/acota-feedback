@@ -1,69 +1,60 @@
 package es.weso.acota.persistence;
 
-import java.sql.SQLException;
 import java.util.Set;
 
+import es.weso.acota.core.business.enhancer.FeedbackConfigurable;
 import es.weso.acota.core.entity.persistence.Feedback;
+import es.weso.acota.core.exceptions.AcotaPersistenceException;
 
 /**
  * FeedbackDAO Interface, this interface allows access to a database and
- * make CRD (Create, Read, Delete) operations about feedbacks
+ * to perform CR (Create, Read) operations about feedbacks
  * @author César Luis Alvargonzález
  *
  */
-public interface FeedbackDAO extends GenericDAO{
+public interface FeedbackDAO extends GenericDAO, FeedbackConfigurable{
 	
 	/**
 	 * Saves a feedback into the database
 	 * @param feedback Feedback to save
-	 * @throws SQLException An exception that provides information on a relational
+	 * @throws AcotaPersistenceException An exception that provides information on a
 	 * database access error or other errors.
-	 * @throws ClassNotFoundException Exception that occurs when the database driver
-	 * is not found in runtime
 	 */
-	public void saveFeedback(Feedback feedback) throws SQLException, ClassNotFoundException;
+	public void saveFeedback(Feedback feedback) throws AcotaPersistenceException;
 	
 	/**
 	 * Returns all the feedbacks stored in the database
 	 * @return All the feedbacks stored in the database
-	 * @throws SQLException An exception that provides information on a relational
+	 * @throws AcotaPersistenceException An exception that provides information on a
 	 * database access error or other errors.
-	 * @throws ClassNotFoundException Exception that occurs when the database driver
-	 * is not found in runtime
 	 */
-	public Set<Feedback> getAllFeedbacks() throws SQLException, ClassNotFoundException;
+	public Set<Feedback> getAllFeedbacks() throws AcotaPersistenceException;
 	
 	/**
 	 * Returns all the feedbacks where the user, associated to the userId, has taken part
 	 * @param userId Id of the user
 	 * @return All the feedbacks where the user, associated to the userId, has taken part
-	 * @throws SQLException An exception that provides information on a relational
+	 * @throws AcotaPersistenceException An exception that provides information on a
 	 * database access error or other errors.
-	 * @throws ClassNotFoundException Exception that occurs when the database driver
-	 * is not found in runtime
 	 */
-	public Set<Feedback> getFeedbacksByUserId(int userId) throws SQLException, ClassNotFoundException;
+	public Set<Feedback> getFeedbacksByUserId(int userId) throws AcotaPersistenceException;
 	
 	/**
 	 * Returns all the feedbacks tagged with the provided label
 	 * @param label Feedback's label
 	 * @return All the feedbacks tagged with the provided label
-	 * @throws SQLException An exception that provides information on a relational
+	 * @throws AcotaPersistenceException An exception that provides information on a
 	 * database access error or other errors.
-	 * @throws ClassNotFoundException Exception that occurs when the database driver
-	 * is not found in runtime
 	 */
-	public Set<Feedback> getFeedbacksByLabel(String label) throws SQLException, ClassNotFoundException;
+	public Set<Feedback> getFeedbacksByLabel(String label) throws AcotaPersistenceException;
 	
 	/**
 	 * Returns all the feedbacks tagged to an specific document
 	 * @param document Feedback's document
 	 * @return All the feedbacks tagged to an specific document
-	 * @throws SQLException An exception that provides information on a relational
+	 * @throws AcotaPersistenceException An exception that provides information on a
 	 * database access error or other errors.
-	 * @throws ClassNotFoundException Exception that occurs when the database driver
-	 * is not found in runtime
 	 */
-	public Set<Feedback> getFeedbacksByDocument(String document) throws SQLException, ClassNotFoundException;
+	public Set<Feedback> getFeedbacksByDocument(String document) throws AcotaPersistenceException;
 	
 }
