@@ -185,9 +185,7 @@ public class FactoryDAO {
 	 * @throws SecurityException 
 	 * @throws IllegalArgumentException 
 	 */
-	public static LabelDAO createLabelDAO(FeedbackConfiguration configuration) throws AcotaConfigurationException,
-			InstantiationException, IllegalAccessException,
-			ClassNotFoundException, IllegalArgumentException, SecurityException, InvocationTargetException, NoSuchMethodException {
+	public static LabelDAO createLabelDAO(FeedbackConfiguration configuration) throws IllegalArgumentException, SecurityException, InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException, ClassNotFoundException, AcotaConfigurationException  {
 		instanciateClass();
 		return (LabelDAO) Class.forName(getLabelDAO(configuration))
 				.getDeclaredConstructor(FeedbackConfiguration.class)

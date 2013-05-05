@@ -41,10 +41,12 @@ public class DocumentMongoDBDAO extends GenericMongoDBDAO implements DocumentDAO
 	 * Zero-argument default constructor
 	 * @throws AcotaConfigurationException Any exception that occurs while initializing 
 	 * a Configuration object
+	 * @throws AcotaPersistenceException 
 	 */
-	public DocumentMongoDBDAO() throws AcotaConfigurationException{
+	public DocumentMongoDBDAO() throws AcotaConfigurationException, AcotaPersistenceException{
 		super();
 		loadConfiguration(configuration);
+		this.db = MongoDBDAO.getInstance(configuration).getDb();
 	}
 	
 	/** 
@@ -57,7 +59,7 @@ public class DocumentMongoDBDAO extends GenericMongoDBDAO implements DocumentDAO
 	public DocumentMongoDBDAO(FeedbackConfiguration configuration) throws AcotaConfigurationException, AcotaPersistenceException{
 		super();
 		loadConfiguration(configuration);
-		this.db = MongoDBDAO.getInstance(configuration).getDb();
+		this.db = MongoDBDAO.getInstance(this.configuration).getDb();
 	}
 	@Override
 	public void loadConfiguration(FeedbackConfiguration configuration)

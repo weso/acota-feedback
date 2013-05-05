@@ -12,6 +12,7 @@ import org.apache.mahout.cf.taste.impl.model.jdbc.MySQLJDBCDataModel;
 import org.apache.mahout.cf.taste.impl.model.jdbc.PostgreSQLJDBCDataModel;
 import org.apache.mahout.cf.taste.impl.model.mongodb.MongoDBDataModel;
 import org.apache.mahout.cf.taste.model.DataModel;
+import org.apache.mahout.ep.Mapping;
 import org.postgresql.ds.PGSimpleDataSource;
 
 import com.mongodb.MongoException;
@@ -19,8 +20,10 @@ import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
 
 import es.weso.acota.core.FeedbackConfiguration;
 import es.weso.acota.core.entity.persistence.tables.FeedbackTable;
+import es.weso.acota.core.exceptions.AcotaConfigurationException;
 import es.weso.acota.core.exceptions.AcotaPersistenceException;
 import es.weso.acota.persistence.DBMS;
+import es.weso.acota.persistence.nosql.MongoDBDAO;
 
 /**
  * Loads a DataModel for the specific DBMS (MySQL, PostgreSQL or MongoDB=
@@ -40,13 +43,10 @@ public class DataModelUtil {
 		try {
 			return selectDataModel(configuration);
 		} catch (NumberFormatException e) {
-			e.printStackTrace();
 			throw new AcotaPersistenceException(e);
 		} catch (UnknownHostException e) {
-			e.printStackTrace();
 			throw new AcotaPersistenceException(e);
 		} catch (MongoException e) {
-			e.printStackTrace();
 			throw new AcotaPersistenceException(e);
 		}
 	}
@@ -86,9 +86,29 @@ public class DataModelUtil {
 	protected static DataModel loadMongoDBDataModel(FeedbackConfiguration configuration) throws NumberFormatException, UnknownHostException, MongoException{
 		FeedbackTable feedback = configuration.getFeedbackTable();
 		
-		return new MongoDBDataModel(configuration.getDatabaseUrl(),getPort(configuration.getDatabasePort(), DBMS.DB_MONGODB_PORT),
-				configuration.getDatabaseName(),configuration.getDatabasePrefix()+feedback.getName(),
-				true, true, null);
+		return new MongoDBDataModel(configuration.getDatabaseUrl(), 
+				getPort(configuration.getDatabasePort(), DBMS.DB_MONGODB_PORT),
+				configuration.getDatabaseName(),
+				configuration.getDatabasePrefix()+feedback.getName(),
+				true, 
+				true, 
+				null,
+				feedback.getDocumentIdAttribute(),
+				feedback.getLabelIdAttribute(), 
+				feedback.getPreferenceAttribute(),configuration.getDatabasePrefix()+feedback.getName()+"_data");
+		
+		/*return new MongoDBDataModel(configuration.getDatabaseUrl(), 
+				getPort(configuration.getDatabasePort(), DBMS.DB_MONGODB_PORT),
+				configuration.getDatabaseName(),
+				configuration.getDatabasePrefix()+feedback.getName(),
+				true, 
+				true, 
+				null,
+				configuration.getDatabaseUser(),
+				configuration.getDatabasePassword(), 
+				feedback.getDocumentIdAttribute(),
+				feedback.getLabelIdAttribute(), 
+				feedback.getPreferenceAttribute(),null);*/
 	}
 	
 	/**
@@ -125,9 +145,8 @@ public class DataModelUtil {
 		dataSource.setUser(configuration.getDatabaseUser());
 		dataSource.setPassword(configuration.getDatabasePassword());
 		dataSource.setDatabaseName(configuration.getDatabaseName());
-		
 		ConnectionPoolDataSource data = new ConnectionPoolDataSource(dataSource);
-		
+
 		FeedbackTable feedback = configuration.getFeedbackTable();
 		return new PostgreSQLJDBCDataModel(data,
 				configuration.getDatabasePrefix()+feedback.getName(), feedback.getDocumentIdAttribute(),

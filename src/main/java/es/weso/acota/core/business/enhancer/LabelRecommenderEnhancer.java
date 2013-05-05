@@ -1,6 +1,6 @@
 package es.weso.acota.core.business.enhancer;
 
-import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
@@ -8,20 +8,18 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import org.apache.mahout.cf.taste.common.TasteException;
-import org.apache.mahout.cf.taste.impl.recommender.GenericItemBasedRecommender;
-import org.apache.mahout.cf.taste.impl.similarity.LogLikelihoodSimilarity;
 import org.apache.mahout.cf.taste.model.DataModel;
 import org.apache.mahout.cf.taste.recommender.ItemBasedRecommender;
 import org.apache.mahout.cf.taste.recommender.RecommendedItem;
-import org.apache.mahout.cf.taste.similarity.ItemSimilarity;
 
 import es.weso.acota.core.FeedbackConfiguration;
 import es.weso.acota.core.entity.ProviderTO;
 import es.weso.acota.core.entity.TagTO;
 import es.weso.acota.core.exceptions.AcotaConfigurationException;
 import es.weso.acota.core.exceptions.AcotaPersistenceException;
+import es.weso.acota.core.utils.AcotaUtil;
 import es.weso.acota.core.utils.lang.LanguageDetector;
-import es.weso.acota.core.utils.mahout.DataModelUtil;
+import es.weso.acota.core.utils.mahout.RecommenderUtil;
 import es.weso.acota.persistence.LabelDAO;
 import es.weso.acota.persistence.factory.FactoryDAO;
 
@@ -38,6 +36,8 @@ public class LabelRecommenderEnhancer extends EnhancerAdapter implements Feedbac
 
 	protected LabelDAO labelDao;
 	protected LanguageDetector languageDetector;
+	protected DataModel dataModel;
+	protected RecommenderUtil recommenderUtil;
 	
 	protected int numRecommendations;
 	protected double relevance;
@@ -54,13 +54,19 @@ public class LabelRecommenderEnhancer extends EnhancerAdapter implements Feedbac
 	 * application tries to reflectively create an instance
 	 * @throws ClassNotFoundException Thrown when an application tries to load in a
 	 * class through its string name
+	 * @throws NoSuchMethodException 
+	 * @throws InvocationTargetException 
+	 * @throws SecurityException 
+	 * @throws IllegalArgumentException 
+	 * @throws AcotaPersistenceException 
 	 */
-	public LabelRecommenderEnhancer() throws AcotaConfigurationException, InstantiationException, IllegalAccessException, ClassNotFoundException  {
+	public LabelRecommenderEnhancer() throws AcotaConfigurationException, InstantiationException, IllegalAccessException, ClassNotFoundException, IllegalArgumentException, SecurityException, InvocationTargetException, NoSuchMethodException, AcotaPersistenceException  {
 		super();
 		LabelRecommenderEnhancer.provider = new ProviderTO(
 				"Label Recommender Enhancer");
 		loadConfiguration(configuration);
-		this.labelDao = FactoryDAO.createLabelDAO();
+		this.labelDao = FactoryDAO.createLabelDAO(this.configuration);
+		this.recommenderUtil = new RecommenderUtil(configuration);
 	}
 	
 	/**
@@ -74,14 +80,19 @@ public class LabelRecommenderEnhancer extends EnhancerAdapter implements Feedbac
 	 * application tries to reflectively create an instance
 	 * @throws ClassNotFoundException Thrown when an application tries to load in a
 	 * class through its string name
+	 * @throws NoSuchMethodException 
+	 * @throws InvocationTargetException 
+	 * @throws SecurityException 
+	 * @throws IllegalArgumentException 
+	 * @throws AcotaPersistenceException 
 	 */
-	public LabelRecommenderEnhancer(FeedbackConfiguration configuration) throws AcotaConfigurationException, InstantiationException, IllegalAccessException, ClassNotFoundException {
+	public LabelRecommenderEnhancer(FeedbackConfiguration configuration) throws AcotaConfigurationException, InstantiationException, IllegalAccessException, ClassNotFoundException, IllegalArgumentException, SecurityException, InvocationTargetException, NoSuchMethodException, AcotaPersistenceException {
 		super();
 		LabelRecommenderEnhancer.provider = new ProviderTO(
 				"Label Recommender Enhancer");
 		loadConfiguration(configuration);
-		this.labelDao = FactoryDAO.createLabelDAO();
-		this.languageDetector = LanguageDetector.getInstance(configuration);
+		this.labelDao = FactoryDAO.createLabelDAO(this.configuration);
+		this.recommenderUtil = new RecommenderUtil(configuration);
 	}
 	
 	@Override
@@ -91,24 +102,29 @@ public class LabelRecommenderEnhancer extends EnhancerAdapter implements Feedbac
 		this.configuration = configuration;
 		this.relevance = configuration.getLabelRecommenderRelevance();
 		this.numRecommendations = configuration.getLabelRecomenderNumRecommendations();
+		this.languageDetector = LanguageDetector.getInstance(configuration);
 	}
 
 	@Override
 	protected void execute() throws Exception {
-		ItemBasedRecommender recommender = loadRecommender();
+		
+		ItemBasedRecommender recommender = recommenderUtil.loadRecommender();
 		List<RecommendedItem> items = null;
-		for (Entry<String, TagTO> label : tags.entrySet()) {
+		
+		for (Entry<String, TagTO> label : AcotaUtil.backupTags(tags).entrySet()) {
 			try {
-				items = recommender.mostSimilarItems(label.getKey().hashCode(),
+	
+				items = recommender.mostSimilarItems(recommenderUtil.fromIdToLong(label.getKey()),
 						numRecommendations);
 				handleRecommendLabels(items);
 			} catch (TasteException e) {
+				e.printStackTrace();
 				//Drain, It sucks but is essentially necessary, Mahout 
 				//throws an exception when it tries to recommend an 
 				//item that does not exists
 			}
 		}
-	}
+ 	}
 
 	@Override
 	protected void preExecute() throws Exception {
@@ -123,19 +139,6 @@ public class LabelRecommenderEnhancer extends EnhancerAdapter implements Feedbac
 		this.request.getTargetProviders().add(getProvider());
 		logger.debug("Add suggestons to request");
 		this.request.setSuggestions(suggest);
-	}
-
-	/**
-	 * Loads into memory the Mahout Recommender
-	 * @return ItemBasedRecommender Interface implemented by "item-based" recommenders.
-	 * @throws IOException Signals that an I/O exception of some sort has occurred.
-	 * @throws AcotaPersistenceException 
-	 */
-	public ItemBasedRecommender loadRecommender() throws IOException, AcotaPersistenceException {
-		DataModel dataModel = DataModelUtil.loadDataModel(configuration);
-
-		ItemSimilarity itemSimilarity = new LogLikelihoodSimilarity(dataModel);
-		return new GenericItemBasedRecommender(dataModel, itemSimilarity);
 	}
 
 	/**
@@ -166,7 +169,7 @@ public class LabelRecommenderEnhancer extends EnhancerAdapter implements Feedbac
 			Collection<RecommendedItem> items) {
 		Set<Integer> hashes = new HashSet<Integer>();
 		for (RecommendedItem item : items) {
-			hashes.add((int) item.getItemID());
+			hashes.add(recommenderUtil.fromLongToId(item.getItemID()));
 		}
 		return hashes;
 	}

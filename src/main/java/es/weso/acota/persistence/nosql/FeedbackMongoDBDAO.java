@@ -54,10 +54,13 @@ public class FeedbackMongoDBDAO extends GenericMongoDBDAO implements
 	 * @throws AcotaConfigurationException
 	 *             Any exception that occurs while initializing a Configuration
 	 *             object
+	 * @throws AcotaPersistenceException 
 	 */
-	public FeedbackMongoDBDAO() throws AcotaConfigurationException {
+	public FeedbackMongoDBDAO() throws AcotaConfigurationException, AcotaPersistenceException {
 		super();
 		loadConfiguration(configuration);
+		this.db = MongoDBDAO.getInstance(configuration).getDb();
+		
 	}
 
 	/**
@@ -68,11 +71,13 @@ public class FeedbackMongoDBDAO extends GenericMongoDBDAO implements
 	 * @throws AcotaConfigurationException
 	 *             Any exception that occurs while initializing a Configuration
 	 *             object
+	 * @throws AcotaPersistenceException 
 	 */
 	public FeedbackMongoDBDAO(FeedbackConfiguration configuration)
-			throws AcotaConfigurationException {
+			throws AcotaConfigurationException, AcotaPersistenceException {
 		super();
 		loadConfiguration(this.configuration);
+		this.db = MongoDBDAO.getInstance(this.configuration).getDb();
 	}
 
 	@Override
@@ -111,9 +116,8 @@ public class FeedbackMongoDBDAO extends GenericMongoDBDAO implements
 		BasicDBObject query = new BasicDBObject(feedbackIdAttribute,
 				feedback.getId());
 		query.append(feedbackUserIdAttribute, feedback.getUserId());
-		query.append(feedbackDocumentIdAttribute, feedback.getDocument()
-				.hashCode());
-		query.append(labelIdAttribute, feedback.getLabel().hashCode());
+		query.append(feedbackDocumentIdAttribute, new Long(feedback.getDocument().hashCode()));
+		query.append(feedbackLabelIdAttribute, new Long(feedback.getLabel().hashCode()));
 		query.append(feedbackPreferenceAttribute, feedback.getPreference());
 		query.append(feedbackTimestampAttribute, new Date());
 

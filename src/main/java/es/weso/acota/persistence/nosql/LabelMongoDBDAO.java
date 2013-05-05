@@ -58,7 +58,7 @@ public class LabelMongoDBDAO extends GenericMongoDBDAO implements LabelDAO {
 	public LabelMongoDBDAO(FeedbackConfiguration configuration) throws AcotaConfigurationException, AcotaPersistenceException{
 		super();
 		loadConfiguration(configuration);
-		this.db = MongoDBDAO.getInstance(configuration).getDb();
+		this.db = MongoDBDAO.getInstance(this.configuration).getDb();
 	}
 	
 	@Override
