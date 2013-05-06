@@ -7,10 +7,18 @@ jdk:
 
 before_script:
   - 'wget http://156.35.82.101:7000/downloads/acota/utils/travis/feedback/acota.properties'
-  - 'wget http://156.35.82.101:7000/downloads/acota/utils/travis/sql/acota.sql'
+  - 'wget http://156.35.82.101:7000/downloads/acota/utils/travis/sql/acota.mysql.sql'
+  - 'wget http://156.35.82.101:7000/downloads/acota/utils/travis/sql/acota.postgresql.sql'
   - mysql --user="root" --password="" -e 'SET GLOBAL time_zone = "+00:00";'
   - mysql -e 'create database acota;'
-  - mysql --user="root" --password="" acota < acota.sql
+  - mysql --user="root" --password="" acota < acota.mysql.sql
+  - mysql -e "CREATE USER acota IDENTIFIED BY 'acota';"
+  - mysql -e "GRANT ALL PRIVILEGES ON acota TO 'acota'@'%' WITH GRANT OPTION;"
+  - mysql -e "GRANT ALL PRIVILEGES ON acota TO 'acota'@localhost WITH GRANT OPTION;"
+  - psql -c "CREATE DATABASE acota;" -U postes
+  - psql -U postgres -d acota -a -f acota.postgresql.sql
+  - psql -c "CREATE USER acota WITH PASSWORD 'acota';" -U postgres
+  - psql -c "GRANT ALL PRIVILEGES ON DATABASE acota to acota;" -U postes
   - 'wget 156.35.82.101:7000/downloads/acota/utils/travis/maven/addServer.py'
 
 env:
@@ -24,4 +32,4 @@ after_success:
 
 notifications:
   email:
-    - sisa989@gmail.com
+    - sisa989@gmail.comgr
