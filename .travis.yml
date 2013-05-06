@@ -15,10 +15,10 @@ before_script:
   - mysql --user="root" --password="" -e "CREATE USER acota IDENTIFIED BY 'acota';"
   - mysql --user="root" --password="" --database="acota" -e "GRANT ALL PRIVILEGES ON acota TO 'acota'@'%' WITH GRANT OPTION;"
   - mysql --user="root" --password="" --database="acota" -e "GRANT ALL PRIVILEGES ON acota TO 'acota'@localhost WITH GRANT OPTION;"
-  - psql -c "CREATE DATABASE acota;" -U postes
+  - psql -U postgres -c "CREATE DATABASE acota;"
   - psql -U postgres -d acota -a -f acota.postgresql.sql
-  - psql -c "CREATE USER acota WITH PASSWORD 'acota';" -U postgres
-  - psql -c "GRANT ALL PRIVILEGES ON DATABASE acota to acota;" -U postes
+  - psql -U postgres -c "CREATE USER acota WITH PASSWORD 'acota';"
+  - psql -U postgres -c "GRANT ALL PRIVILEGES ON DATABASE acota to acota;"
   - 'wget 156.35.82.101:7000/downloads/acota/utils/travis/maven/addServer.py'
 
 env:
