@@ -1,16 +1,21 @@
 language: java
 
 jdk:
-  - openjdk6
   - openjdk7
   - oraclejdk7
+  - openjdk6
+  - oraclejdk6
 
 before_script:
   - 'wget http://156.35.82.101:7000/downloads/acota/utils/travis/feedback/acota.properties'
-  - 'wget http://156.35.82.101:7000/downloads/acota/utils/travis/sql/acota.sql'
+  - 'wget http://156.35.82.101:7000/downloads/acota/utils/travis/sql/acota.mysql.sql'
+  - 'wget http://156.35.82.101:7000/downloads/acota/utils/travis/sql/acota.postgresql.sql'
   - mysql --user="root" --password="" -e 'SET GLOBAL time_zone = "+00:00";'
-  - mysql -e 'create database acota;'
-  - mysql --user="root" --password="" acota < acota.sql
+  - mysql --user="root" --password="" -e 'create database acota;'
+  - mysql --user="root" --password="" acota < acota.mysql.sql
+  - psql -U postgres -c "CREATE DATABASE acota;"
+  - psql -U postgres -d acota -a -f acota.postgresql.sql
+  - psql -U postgres -c "update pg_authid set rolname ='root' where rolname = 'postgres';"
   - 'wget 156.35.82.101:7000/downloads/acota/utils/travis/maven/addServer.py'
 
 env:
@@ -24,4 +29,4 @@ after_success:
 
 notifications:
   email:
-    - sisa989@gmail.com
+    - sisa989@gmail.comgr

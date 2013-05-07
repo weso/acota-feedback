@@ -1,70 +1,40 @@
-package es.weso.acota.persistence.mysql;
+package es.weso.acota.persistence.sql.postgresql;
 
 import static org.junit.Assert.assertEquals;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.TimeZone;
 
-import org.dbunit.database.DatabaseConfig;
-import org.dbunit.database.DatabaseConnection;
-import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.ITable;
 import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
-import org.dbunit.ext.mysql.MySqlDataTypeFactory;
-import org.dbunit.operation.DatabaseOperation;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 import es.weso.acota.core.FeedbackConfiguration;
 import es.weso.acota.core.entity.persistence.Feedback;
+import es.weso.acota.persistence.DBMS;
 import es.weso.acota.persistence.FeedbackDAO;
 import es.weso.acota.persistence.sql.FeedbackSQLDAO;
 
-public class FeedbackMysqlDAOTest {
+public class FeedbackPostgreSQLDAOTest extends PostgreSQLDAOTest {
 
 	protected FeedbackDAO feedbackDao;
 	
 	@Before
 	public void init() throws Exception {
-		
-		TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
-		
-		DatabaseOperation.CLEAN_INSERT.execute(getConnection(), getDataSet());
-		this.feedbackDao = new FeedbackSQLDAO();
+		super.init();
+		FeedbackConfiguration feedback = new FeedbackConfiguration();
+		feedback.setDatabaseType(DBMS.DB_POSTGRESQL);
+		this.feedbackDao = new FeedbackSQLDAO(feedback);
 	}
-
+	
 	@After
 	public void after() throws Exception {
-		DatabaseOperation.DELETE_ALL.execute(getConnection(), getDataSet());
-	}
-
-	protected IDatabaseConnection getConnection() throws Exception {
-		Class.forName("com.mysql.jdbc.Driver");
-		FeedbackConfiguration configuration = new FeedbackConfiguration();
-		Connection jdbcConnection = DriverManager.getConnection(
-				"jdbc:mysql://"+ configuration.getDatabaseUrl() + ":"+ configuration.getDatabasePort()+"/"+configuration.getDatabaseName()+"?useTimezone=false&useLegacyDatetimeCode=false&serverTimezone=UTC", configuration.getDatabaseUser(), configuration.getDatabasePassword());
-		IDatabaseConnection connection = new DatabaseConnection(jdbcConnection);
-		
-		DatabaseConfig dbConfig = connection.getConfig();
-		dbConfig.setProperty(DatabaseConfig.PROPERTY_DATATYPE_FACTORY, new MySqlDataTypeFactory());
-		
-		return connection;
-	}
-
-	protected DatabaseOperation getSetUpOperation() throws Exception {
-		return DatabaseOperation.REFRESH;
-	}
-
-	protected IDataSet getDataSet() throws Exception {
-		return new FlatXmlDataSetBuilder().build(this.getClass().getResource(
-				"/resources/dbunit.xml"));
+		super.after();
 	}
 	
 	@Test

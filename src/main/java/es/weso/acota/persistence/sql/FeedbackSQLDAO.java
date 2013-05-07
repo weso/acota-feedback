@@ -58,13 +58,13 @@ public class FeedbackSQLDAO extends GenericSQLDAO implements FeedbackDAO {
 	 */
 	public FeedbackSQLDAO(FeedbackConfiguration configuration) throws AcotaConfigurationException {
 		super();
-		loadConfiguration(this.configuration);
+		loadConfiguration(configuration);
 	}
 	
 	@Override
 	public void loadConfiguration(FeedbackConfiguration configuration)
 			throws AcotaConfigurationException {
-		super.loadConfiguration(this.configuration);
+		super.loadConfiguration(configuration);
 		
 		DocumentTable document = this.configuration.getDocumentTable();
 		this.documentTableName = this.configuration.getDatabasePrefix()+document.getName();
@@ -131,11 +131,11 @@ public class FeedbackSQLDAO extends GenericSQLDAO implements FeedbackDAO {
 			con = openConnection();
 
 			StringBuilder query = new StringBuilder("select f.")
-					.append(feedbackIdAttribute).append(", f.")
-					.append(feedbackUserIdAttribute).append(", d.")
-					.append(documentNameAttribute).append(", l.")
-					.append(labelNameAttribute).append(",f.")
-					.append(feedbackTimestampAttribute).append(" from ")
+					.append(feedbackIdAttribute).append(" as f1, f.")
+					.append(feedbackUserIdAttribute).append(" as f2, d.")
+					.append(documentNameAttribute).append(" as f3, l.")
+					.append(labelNameAttribute).append(" as f4, f.")
+					.append(feedbackTimestampAttribute).append(" as f5 from ")
 					.append(documentTableName).append(" as d,")
 					.append(feedbackTableName).append(" as f,")
 					.append(labelTableName).append(" as l where f.")
@@ -149,11 +149,11 @@ public class FeedbackSQLDAO extends GenericSQLDAO implements FeedbackDAO {
 
 			while (rs.next()) {
 				feedback = new Feedback();
-				feedback.setId(rs.getInt(feedbackIdAttribute));
-				feedback.setUserId(rs.getInt(feedbackUserIdAttribute));
-				feedback.setDocument(rs.getString("d." + documentNameAttribute));
-				feedback.setLabel(rs.getString("l." + labelNameAttribute));
-				feedback.setDate(new java.util.Date(rs.getTimestamp(feedbackTimestampAttribute).getTime()));
+				feedback.setId(rs.getInt("f1"));
+				feedback.setUserId(rs.getInt("f2"));
+				feedback.setDocument(rs.getString("f3"));
+				feedback.setLabel(rs.getString("f4"));
+				feedback.setDate(new java.util.Date(rs.getTimestamp("f5").getTime()));
 				feedbacks.add(feedback);
 			}
 
@@ -181,11 +181,11 @@ public class FeedbackSQLDAO extends GenericSQLDAO implements FeedbackDAO {
 			con = openConnection();
 
 			StringBuilder query = new StringBuilder("select f.")
-					.append(feedbackIdAttribute).append(", f.")
-					.append(feedbackUserIdAttribute).append(", d.")
-					.append(documentNameAttribute).append(", l.")
-					.append(labelNameAttribute).append(",f.")
-					.append(feedbackTimestampAttribute).append(" from ")
+					.append(feedbackIdAttribute).append(" as f1, f.")
+					.append(feedbackUserIdAttribute).append(" as f2, d.")
+					.append(documentNameAttribute).append(" as f3, l.")
+					.append(labelNameAttribute).append(" as f4, f.")
+					.append(feedbackTimestampAttribute).append(" as f5 from ")
 					.append(documentTableName).append(" as d,")
 					.append(feedbackTableName).append(" as f,")
 					.append(labelTableName).append(" as l where f.")
@@ -201,11 +201,11 @@ public class FeedbackSQLDAO extends GenericSQLDAO implements FeedbackDAO {
 
 			while (rs.next()) {
 				feedback = new Feedback();
-				feedback.setId(rs.getInt(feedbackIdAttribute));
-				feedback.setUserId(rs.getInt(feedbackUserIdAttribute));
-				feedback.setDocument(rs.getString("d." + documentNameAttribute));
-				feedback.setLabel(rs.getString("l." + labelNameAttribute));
-				feedback.setDate(new java.util.Date(rs.getTimestamp(feedbackTimestampAttribute).getTime()));
+				feedback.setId(rs.getInt("f1"));
+				feedback.setUserId(rs.getInt("f2"));
+				feedback.setDocument(rs.getString("f3"));
+				feedback.setLabel(rs.getString("f4"));
+				feedback.setDate(new java.util.Date(rs.getTimestamp("f5").getTime()));
 				feedbacks.add(feedback);
 			}
 
@@ -233,11 +233,11 @@ public class FeedbackSQLDAO extends GenericSQLDAO implements FeedbackDAO {
 			con = openConnection();
 
 			StringBuilder query = new StringBuilder("select f.")
-					.append(feedbackIdAttribute).append(", f.")
-					.append(feedbackUserIdAttribute).append(", d.")
-					.append(documentNameAttribute).append(", l.")
-					.append(labelNameAttribute).append(",f.")
-					.append(feedbackTimestampAttribute).append(" from ")
+					.append(feedbackIdAttribute).append(" as f1, f.")
+					.append(feedbackUserIdAttribute).append(" as f2, d.")
+					.append(documentNameAttribute).append(" as f3, l.")
+					.append(labelNameAttribute).append(" as f4, f.")
+					.append(feedbackTimestampAttribute).append(" as f5 from ")
 					.append(documentTableName).append(" as d,")
 					.append(feedbackTableName).append(" as f,")
 					.append(labelTableName).append(" as l where l.")
@@ -253,11 +253,11 @@ public class FeedbackSQLDAO extends GenericSQLDAO implements FeedbackDAO {
 
 			while (rs.next()) {
 				feedback = new Feedback();
-				feedback.setId(rs.getInt(feedbackIdAttribute));
-				feedback.setUserId(rs.getInt(feedbackUserIdAttribute));
-				feedback.setDocument(rs.getString("d." + documentNameAttribute));
-				feedback.setLabel(rs.getString("l." + labelNameAttribute));
-				feedback.setDate(new java.util.Date(rs.getTimestamp(feedbackTimestampAttribute).getTime()));
+				feedback.setId(rs.getInt("f1"));
+				feedback.setUserId(rs.getInt("f2"));
+				feedback.setDocument(rs.getString("f3"));
+				feedback.setLabel(rs.getString("f4"));
+				feedback.setDate(new java.util.Date(rs.getTimestamp("f5").getTime()));
 				feedbacks.add(feedback);
 			}
 
@@ -286,11 +286,11 @@ public class FeedbackSQLDAO extends GenericSQLDAO implements FeedbackDAO {
 			con = openConnection();
 
 			StringBuilder query = new StringBuilder("select f.")
-					.append(feedbackIdAttribute).append(", f.")
-					.append(feedbackUserIdAttribute).append(", d.")
-					.append(documentNameAttribute).append(", l.")
-					.append(labelNameAttribute).append(",f.")
-					.append(feedbackTimestampAttribute).append(" from ")
+					.append(feedbackIdAttribute).append(" as f1, f.")
+					.append(feedbackUserIdAttribute).append(" as f2, d.")
+					.append(documentNameAttribute).append(" as f3, l.")
+					.append(labelNameAttribute).append(" as f4, f.")
+					.append(feedbackTimestampAttribute).append(" as f5 from ")
 					.append(documentTableName).append(" as d,")
 					.append(feedbackTableName).append(" as f,")
 					.append(labelTableName).append(" as l where d.")
@@ -306,11 +306,11 @@ public class FeedbackSQLDAO extends GenericSQLDAO implements FeedbackDAO {
 
 			while (rs.next()) {
 				feedback = new Feedback();
-				feedback.setId(rs.getInt(feedbackIdAttribute));
-				feedback.setUserId(rs.getInt(feedbackUserIdAttribute));
-				feedback.setDocument(rs.getString("d." + documentNameAttribute));
-				feedback.setLabel(rs.getString("l." + labelNameAttribute));
-				feedback.setDate(new java.util.Date(rs.getTimestamp(feedbackTimestampAttribute).getTime()));
+				feedback.setId(rs.getInt("f1"));
+				feedback.setUserId(rs.getInt("f2"));
+				feedback.setDocument(rs.getString("f3"));
+				feedback.setLabel(rs.getString("f4"));
+				feedback.setDate(new java.util.Date(rs.getTimestamp("f5").getTime()));
 				feedbacks.add(feedback);
 			}
 

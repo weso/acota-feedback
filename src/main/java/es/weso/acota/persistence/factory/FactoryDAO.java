@@ -84,10 +84,10 @@ public class FactoryDAO {
 	 * application tries to reflectively create an instance
 	 * @throws ClassNotFoundException Thrown when an application tries to load in a
 	 * class through its string name
-	 * @throws NoSuchMethodException 
-	 * @throws InvocationTargetException 
-	 * @throws SecurityException 
-	 * @throws IllegalArgumentException 
+	 * @throws NoSuchMethodException Thrown when a particular method cannot be found.
+	 * @throws InvocationTargetException Thrown by an invoked method or constructor.
+	 * @throws SecurityException Thrown by the security manager to indicate a security violation.
+	 * @throws IllegalArgumentException Thrown by the security manager to indicate a security violation.
 	 */
 	public static DocumentDAO createDocumentDAO(FeedbackConfiguration configuration)
 			throws ClassNotFoundException, AcotaConfigurationException,
@@ -132,10 +132,10 @@ public class FactoryDAO {
 	 * application tries to reflectively create an instance
 	 * @throws ClassNotFoundException Thrown when an application tries to load in a
 	 * class through its string name
-	 * @throws NoSuchMethodException 
-	 * @throws InvocationTargetException 
-	 * @throws SecurityException 
-	 * @throws IllegalArgumentException 
+	 * @throws NoSuchMethodException Thrown when a particular method cannot be found.
+	 * @throws InvocationTargetException Thrown by an invoked method or constructor.
+	 * @throws SecurityException Thrown by the security manager to indicate a security violation.
+	 * @throws IllegalArgumentException Thrown by the security manager to indicate a security violation.
 	 */
 	public static FeedbackDAO createFeedbackDAO(FeedbackConfiguration configuration)
 			throws AcotaConfigurationException, InstantiationException,
@@ -180,10 +180,10 @@ public class FactoryDAO {
 	 * application tries to reflectively create an instance
 	 * @throws ClassNotFoundException Thrown when an application tries to load in a
 	 * class through its string name
-	 * @throws NoSuchMethodException 
-	 * @throws InvocationTargetException 
-	 * @throws SecurityException 
-	 * @throws IllegalArgumentException 
+	 * @throws NoSuchMethodException Thrown when a particular method cannot be found.
+	 * @throws InvocationTargetException Thrown by an invoked method or constructor.
+	 * @throws SecurityException Thrown by the security manager to indicate a security violation.
+	 * @throws IllegalArgumentException Thrown by the security manager to indicate a security violation.
 	 */
 	public static LabelDAO createLabelDAO(FeedbackConfiguration configuration) throws IllegalArgumentException, SecurityException, InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException, ClassNotFoundException, AcotaConfigurationException  {
 		instanciateClass();
