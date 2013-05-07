@@ -64,7 +64,7 @@ public class FeedbackConfiguration extends SeedConfiguration implements Configur
 	public FeedbackConfiguration() throws AcotaConfigurationException {
 		FeedbackConfiguration.LOGGER = Logger.getLogger(FeedbackConfiguration.class);
 		
-		CompositeConfiguration configuration = foo(CONFIG);
+		CompositeConfiguration configuration = configure(CONFIG);
 		if(CONFIG==null)
 			FeedbackConfiguration.CONFIG = configuration;
 		
@@ -217,7 +217,7 @@ public class FeedbackConfiguration extends SeedConfiguration implements Configur
 	@Override
 	protected void loadCustomConfiguration(CompositeConfiguration config) throws AcotaConfigurationException {
 		try {
-			config.addConfiguration(new PropertiesConfiguration(this.getClass().getClassLoader()
+			config.append(new PropertiesConfiguration(this.getClass().getClassLoader()
 					.getResource(INTERNAL_ACOTA_PERSISTENCE_PROPERTIES_PATH)));
 		} catch (ConfigurationException e) {
 			throw new AcotaConfigurationException(e);

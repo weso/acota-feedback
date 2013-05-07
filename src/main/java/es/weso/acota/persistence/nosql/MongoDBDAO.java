@@ -43,11 +43,10 @@ public class MongoDBDAO implements FeedbackConfigurable {
 					Integer.valueOf(port));
 			db = connection.getDB(configuration.getDatabaseName());
 			
-			System.out.println(db.isAuthenticated());
-			/*if (!db.isAuthenticated()) {
+			if (!db.isAuthenticated()) {
 				db.authenticate(configuration.getDatabaseUser(), configuration
 						.getDatabasePassword().toCharArray());
-			}*/
+			}
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
 			throw new AcotaPersistenceException(e);

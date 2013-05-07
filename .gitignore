@@ -16,4 +16,5 @@ target/
 *.out
 
 #Log Files
-acota.log.*
+acota.log*
+acota.html*

@@ -1,7 +1,6 @@
 package es.weso.acota.core.utils.mahout;
 
 import java.io.IOException;
-import java.util.Map;
 
 import org.apache.mahout.cf.taste.common.TasteException;
 import org.apache.mahout.cf.taste.impl.model.mongodb.MongoDBDataModel;
@@ -23,9 +22,9 @@ import es.weso.acota.core.exceptions.AcotaPersistenceException;
 import es.weso.acota.persistence.nosql.MongoDBDAO;
 
 /**
- * 
+ * RecommenderUtils performs peripheral recommender tasks.
  * @author César Luis Alvargonzález
- * 
+ * @since 0.3.8
  */
 public class RecommenderUtil implements FeedbackConfigurable {
 
@@ -38,6 +37,14 @@ public class RecommenderUtil implements FeedbackConfigurable {
 	protected DataModel dataModel;
 	protected MongoDBDataModel mongoDataModel;
 
+	/**
+	 * One-argument default constructor
+	 * @param configuration Acota-feedback's configuration object
+	 * @throws AcotaPersistenceException An exception that provides information on a
+	 * database access error or other errors.
+	 * @throws AcotaConfigurationException Any exception that 
+	 * occurs while initializing a Configuration object
+	 */
 	public RecommenderUtil(FeedbackConfiguration configuration)
 			throws AcotaPersistenceException, AcotaConfigurationException {
 		super();
@@ -59,7 +66,6 @@ public class RecommenderUtil implements FeedbackConfigurable {
 
 	/**
 	 * Loads into memory the Mahout Recommender
-	 * 
 	 * @return ItemBasedRecommender Interface implemented by "item-based"
 	 *         recommenders.
 	 * @throws IOException
@@ -78,9 +84,10 @@ public class RecommenderUtil implements FeedbackConfigurable {
 	}
 
 	/**
-	 * 
-	 * @param label
-	 * @return
+	 * Translates the String to Mahout/MongoDBDataModel's internal
+	 * identifier, if required.
+	 * @param label String to get translated
+	 * @return Mahout/MongoDBDataModel's internal identifier
 	 */
 	public long fromIdToLong(String label) {
 		Long code = new Long(label.hashCode());
@@ -92,17 +99,16 @@ public class RecommenderUtil implements FeedbackConfigurable {
 	}
 
 	/**
-	 * 
-	 * @param id
-	 * @return
+	 * Translates the Mahout/MongoDBDataModel's internal identifier to MongoDB
+	 * identifier, if required.
+	 * @param id Mahout's internal identifier
+	 * @return ID to of the external MongoDB ID (mapping).
 	 */
 	public int fromLongToId(long id) {
 		if (mongoDataModel != null) {
 			DBObject objectIdLong = feedbacks.findOne(new BasicDBObject(
 					"long_value", Long.toString(id)));
-			Map<String, Object> idLong = (Map<String, Object>) objectIdLong
-					.toMap();
-			Object value = idLong.get("element_id");
+			Object value = objectIdLong.toMap().get("element_id");
 			return value == null ? null : Integer.valueOf(value.toString());
 		}
 		return (int) id;

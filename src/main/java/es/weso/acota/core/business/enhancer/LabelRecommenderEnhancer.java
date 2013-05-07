@@ -46,7 +46,7 @@ public class LabelRecommenderEnhancer extends EnhancerAdapter implements Feedbac
 
 	/**
 	 * Zero-argument default constructor
-	 * @throws AcotaConfigurationException ConfigurationException Any exception that 
+	 * @throws AcotaConfigurationException Any exception that 
 	 * occurs while initializing a Configuration object
 	 * @throws InstantiationException Thrown when an application tries to instantiate
 	 * an interface or an abstract class
@@ -54,13 +54,16 @@ public class LabelRecommenderEnhancer extends EnhancerAdapter implements Feedbac
 	 * application tries to reflectively create an instance
 	 * @throws ClassNotFoundException Thrown when an application tries to load in a
 	 * class through its string name
-	 * @throws NoSuchMethodException 
-	 * @throws InvocationTargetException 
-	 * @throws SecurityException 
-	 * @throws IllegalArgumentException 
-	 * @throws AcotaPersistenceException 
+	 * @throws NoSuchMethodException Thrown when a particular method cannot be found.
+	 * @throws InvocationTargetException Thrown by an invoked method or constructor.
+	 * @throws SecurityException Thrown by the security manager to indicate a security violation.
+	 * @throws IllegalArgumentException Thrown to indicate that a method has been passed an illegal or inappropriate argument.
+	 * @throws AcotaPersistenceException An exception that provides information on a
+	 * database access error or other errors.
 	 */
-	public LabelRecommenderEnhancer() throws AcotaConfigurationException, InstantiationException, IllegalAccessException, ClassNotFoundException, IllegalArgumentException, SecurityException, InvocationTargetException, NoSuchMethodException, AcotaPersistenceException  {
+	public LabelRecommenderEnhancer() throws AcotaConfigurationException, InstantiationException, 
+	IllegalAccessException, ClassNotFoundException, IllegalArgumentException, SecurityException, 
+	InvocationTargetException, NoSuchMethodException, AcotaPersistenceException  {
 		super();
 		LabelRecommenderEnhancer.provider = new ProviderTO(
 				"Label Recommender Enhancer");
@@ -70,7 +73,7 @@ public class LabelRecommenderEnhancer extends EnhancerAdapter implements Feedbac
 	}
 	
 	/**
-	 * Zero-argument default constructor
+	 * One-argument constructor
 	 * @param configuration Acota-feedback's configuration class
 	 * @throws AcotaConfigurationException ConfigurationException Any exception that 
 	 * occurs while initializing a Configuration object
@@ -80,13 +83,16 @@ public class LabelRecommenderEnhancer extends EnhancerAdapter implements Feedbac
 	 * application tries to reflectively create an instance
 	 * @throws ClassNotFoundException Thrown when an application tries to load in a
 	 * class through its string name
-	 * @throws NoSuchMethodException 
-	 * @throws InvocationTargetException 
-	 * @throws SecurityException 
-	 * @throws IllegalArgumentException 
-	 * @throws AcotaPersistenceException 
+	 * @throws NoSuchMethodException Thrown when a particular method cannot be found.
+	 * @throws InvocationTargetException Thrown by an invoked method or constructor.
+	 * @throws SecurityException Thrown by the security manager to indicate a security violation.
+	 * @throws IllegalArgumentException Thrown to indicate that a method has been passed an illegal or inappropriate argument.
+	 * @throws AcotaPersistenceException An exception that provides information on a
+	 * database access error or other errors.
 	 */
-	public LabelRecommenderEnhancer(FeedbackConfiguration configuration) throws AcotaConfigurationException, InstantiationException, IllegalAccessException, ClassNotFoundException, IllegalArgumentException, SecurityException, InvocationTargetException, NoSuchMethodException, AcotaPersistenceException {
+	public LabelRecommenderEnhancer(FeedbackConfiguration configuration) throws AcotaConfigurationException, 
+	InstantiationException, IllegalAccessException, ClassNotFoundException, IllegalArgumentException, SecurityException, 
+	InvocationTargetException, NoSuchMethodException, AcotaPersistenceException {
 		super();
 		LabelRecommenderEnhancer.provider = new ProviderTO(
 				"Label Recommender Enhancer");
@@ -118,7 +124,7 @@ public class LabelRecommenderEnhancer extends EnhancerAdapter implements Feedbac
 						numRecommendations);
 				handleRecommendLabels(items);
 			} catch (TasteException e) {
-				e.printStackTrace();
+				//e.printStackTrace();
 				//Drain, It sucks but is essentially necessary, Mahout 
 				//throws an exception when it tries to recommend an 
 				//item that does not exists
