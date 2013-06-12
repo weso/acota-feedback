@@ -20,34 +20,41 @@ import es.weso.acota.persistence.DBMS;
 import es.weso.acota.persistence.FeedbackDAO;
 import es.weso.acota.persistence.sql.FeedbackSQLDAO;
 
+/**
+ * 
+ * FeedbackSQLDAO (PostgreSQL) Unit Test
+ * @author César Luis Alvargonzález
+ *
+ */
 public class FeedbackPostgreSQLDAOTest extends PostgreSQLDAOTest {
 
-	protected FeedbackDAO feedbackDao;
+	protected FeedbackDAO feedbackDAO;
 	
 	@Before
 	public void init() throws Exception {
 		super.init();
 		FeedbackConfiguration feedback = new FeedbackConfiguration();
 		feedback.setDatabaseType(DBMS.DB_POSTGRESQL);
-		this.feedbackDao = new FeedbackSQLDAO(feedback);
+		this.feedbackDAO = new FeedbackSQLDAO(feedback);
 	}
 	
 	@After
 	public void after() throws Exception {
 		super.after();
+		feedbackDAO = null;
 	}
 	
 	@Test
 	public void saveFeedbackTest() throws Exception {
 		Feedback feedback = new Feedback(4, 4, "demo", "http://www.example.es",
 				new Date(1351106647000L));
-		feedbackDao.saveFeedback(feedback);
+		feedbackDAO.saveFeedback(feedback);
 		
         IDataSet databaseDataSet = getConnection().createDataSet();
         ITable actualTable = databaseDataSet.getTable("feedbacks");
 
         IDataSet expectedDataSet = new FlatXmlDataSetBuilder().build(this.getClass().getResource(
-				"/resources/dbunitExpected.xml"));
+				"/dbunitExpected.xml"));
         ITable expectedTable = expectedDataSet.getTable("feedbacks");
 
         assertEquals(expectedTable.getRowCount(), actualTable.getRowCount());
@@ -63,12 +70,12 @@ public class FeedbackPostgreSQLDAOTest extends PostgreSQLDAOTest {
 				new Date(1351106647000L)));
 		feedbacks.add(new Feedback(2, 2, "research", "http://www.weso.es",
 				new Date(1351106647000L)));
-		assertEquals(feedbacks, feedbackDao.getAllFeedbacks());
+		assertEquals(feedbacks, feedbackDAO.getAllFeedbacks());
 	}
 
 	@Test
 	public void getAllFeedbacksByUserIdEmpty() throws Exception {
-		assertEquals(Collections.EMPTY_SET, feedbackDao.getFeedbacksByUserId(0));
+		assertEquals(Collections.EMPTY_SET, feedbackDAO.getFeedbacksByUserId(0));
 	}
 
 	@Test
@@ -76,13 +83,13 @@ public class FeedbackPostgreSQLDAOTest extends PostgreSQLDAOTest {
 		Set<Feedback> feedbacks = new HashSet<Feedback>();
 		feedbacks.add(new Feedback(1, 1, "research", "http://www.weso.es",
 				new Date(1351106647000L)));
-		assertEquals(feedbacks, feedbackDao.getFeedbacksByUserId(1));
+		assertEquals(feedbacks, feedbackDAO.getFeedbacksByUserId(1));
 	}
 
 	@Test
 	public void getAllFeedbacksByLabelEmpty() throws Exception {
 		assertEquals(Collections.EMPTY_SET,
-				feedbackDao.getFeedbacksByLabel("nolabel"));
+				feedbackDAO.getFeedbacksByLabel("nolabel"));
 	}
 
 	@Test
@@ -93,13 +100,13 @@ public class FeedbackPostgreSQLDAOTest extends PostgreSQLDAOTest {
 		feedbacks.add(new Feedback(2, 2, "research", "http://www.weso.es",
 				new Date(1351106647000L)));
 
-		assertEquals(feedbacks, feedbackDao.getFeedbacksByLabel("research"));
+		assertEquals(feedbacks, feedbackDAO.getFeedbacksByLabel("research"));
 	}
 
 	@Test
 	public void getAllFeedbacksByDocumentEmpty() throws Exception {
 		assertEquals(Collections.EMPTY_SET,
-				feedbackDao.getFeedbacksByDocument("http://www.nodocument.es"));
+				feedbackDAO.getFeedbacksByDocument("http://www.nodocument.es"));
 	}
 
 	@Test
@@ -109,7 +116,7 @@ public class FeedbackPostgreSQLDAOTest extends PostgreSQLDAOTest {
 				new Date(1351106647000L)));
 
 		assertEquals(feedbacks,
-				feedbackDao.getFeedbacksByDocument("http://www.example.es"));
+				feedbackDAO.getFeedbacksByDocument("http://www.example.es"));
 	}
 	
 }

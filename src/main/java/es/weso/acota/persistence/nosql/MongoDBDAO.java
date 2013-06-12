@@ -4,6 +4,7 @@ import java.net.UnknownHostException;
 
 import com.mongodb.DB;
 import com.mongodb.Mongo;
+import com.mongodb.MongoClient;
 import com.mongodb.MongoException;
 
 import es.weso.acota.core.FeedbackConfiguration;
@@ -15,6 +16,7 @@ import es.weso.acota.persistence.DBMS;
 /**
  * MongoDB Connection keeper
  * @author César Luis Alvargonzález
+ * @since 0.3.8
  */
 public class MongoDBDAO implements FeedbackConfigurable {
 	protected FeedbackConfiguration configuration;
@@ -38,8 +40,7 @@ public class MongoDBDAO implements FeedbackConfigurable {
 		try {
 			String port = configuration.getDatabasePort();
 			port = port.isEmpty() ? DBMS.DB_MONGODB_PORT : port;
-			
-			connection = new Mongo(configuration.getDatabaseUrl(),
+			connection = new MongoClient(configuration.getDatabaseUrl(),
 					Integer.valueOf(port));
 			db = connection.getDB(configuration.getDatabaseName());
 			
@@ -59,7 +60,7 @@ public class MongoDBDAO implements FeedbackConfigurable {
 
 	/**
 	 * Gets an instance of {@link MongoDBDAO}, 
-	 * in the case it does not exists, it will create one,
+	 * in the case it does not exists, it will create one
 	 * @param configuration Acota-feedback's configuration class
 	 * @return The {@link MongoDBDAO} Instance
 	 * @throws AcotaPersistenceException An exception that provides information on a

@@ -33,7 +33,7 @@ public class DocumentSQLDAO extends GenericSQLDAO implements DocumentDAO {
 	 * a Configuration object
 	 */
 	public DocumentSQLDAO() throws AcotaConfigurationException {
-		super();
+		super(null);
 		loadConfiguration(configuration);
 	}
 	
@@ -44,7 +44,7 @@ public class DocumentSQLDAO extends GenericSQLDAO implements DocumentDAO {
 	 * a Configuration object
 	 */
 	public DocumentSQLDAO(FeedbackConfiguration configuration) throws AcotaConfigurationException {
-		super();
+		super(configuration);
 		loadConfiguration(configuration);
 	}
 	

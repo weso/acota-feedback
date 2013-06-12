@@ -19,6 +19,12 @@ import org.junit.Before;
 import es.weso.acota.core.FeedbackConfiguration;
 import es.weso.acota.persistence.DBMS;
 
+/**
+ * 
+ * SQLDAO (MySQL) Unit Test Helper
+ * @author César Luis Alvargonzález
+ *
+ */
 public class PostgreSQLDAOTest {
 	
 	@Before
@@ -54,6 +60,6 @@ public class PostgreSQLDAOTest {
 
 	protected IDataSet getDataSet() throws Exception {
 		return new FlatXmlDataSetBuilder().build(this.getClass().getResource(
-				"/resources/dbunit.xml"));
+				"/dbunit.xml"));
 	}
 }

@@ -20,6 +20,12 @@ import es.weso.acota.persistence.DBMS;
 import es.weso.acota.persistence.FeedbackDAO;
 import es.weso.acota.persistence.sql.FeedbackSQLDAO;
 
+/**
+ * 
+ * FeedbackSQLDAO (MySQL) Unit Test
+ * @author César Luis Alvargonzález
+ *
+ */
 public class FeedbackMySQLDAOTest extends MySLQDAOTest{
 
 	protected FeedbackDAO feedbackDao;
@@ -47,7 +53,7 @@ public class FeedbackMySQLDAOTest extends MySLQDAOTest{
         ITable actualTable = databaseDataSet.getTable("feedbacks");
 
         IDataSet expectedDataSet = new FlatXmlDataSetBuilder().build(this.getClass().getResource(
-				"/resources/dbunitExpected.xml"));
+				"/dbunitExpected.xml"));
         ITable expectedTable = expectedDataSet.getTable("feedbacks");
 
         assertEquals(expectedTable.getRowCount(), actualTable.getRowCount());

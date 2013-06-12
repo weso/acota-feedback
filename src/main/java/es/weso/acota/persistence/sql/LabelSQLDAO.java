@@ -35,7 +35,7 @@ public class LabelSQLDAO extends GenericSQLDAO implements LabelDAO {
 	 * a Configuration object
 	 */
 	public LabelSQLDAO() throws AcotaConfigurationException  {
-		super();
+		super(null);
 		loadConfiguration(configuration);
 	}
 	
@@ -46,7 +46,7 @@ public class LabelSQLDAO extends GenericSQLDAO implements LabelDAO {
 	 * a Configuration object
 	 */
 	public LabelSQLDAO(FeedbackConfiguration configuration) throws AcotaConfigurationException  {
-		super();
+		super(configuration);
 		loadConfiguration(configuration);
 	}
 	
@@ -106,7 +106,7 @@ public class LabelSQLDAO extends GenericSQLDAO implements LabelDAO {
 			ps.setInt(1, id);
 
 			rs = ps.executeQuery();
-
+		
 			if (rs.next()) {
 				labels = rs.getString(nameAttribute);
 			}

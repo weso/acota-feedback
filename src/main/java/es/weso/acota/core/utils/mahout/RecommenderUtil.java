@@ -7,7 +7,6 @@ import org.apache.mahout.cf.taste.impl.model.mongodb.MongoDBDataModel;
 import org.apache.mahout.cf.taste.impl.recommender.GenericItemBasedRecommender;
 import org.apache.mahout.cf.taste.impl.similarity.TanimotoCoefficientSimilarity;
 import org.apache.mahout.cf.taste.model.DataModel;
-import org.apache.mahout.cf.taste.recommender.ItemBasedRecommender;
 import org.apache.mahout.cf.taste.similarity.ItemSimilarity;
 
 import com.mongodb.BasicDBObject;
@@ -19,6 +18,7 @@ import es.weso.acota.core.FeedbackConfiguration;
 import es.weso.acota.core.business.enhancer.FeedbackConfigurable;
 import es.weso.acota.core.exceptions.AcotaConfigurationException;
 import es.weso.acota.core.exceptions.AcotaPersistenceException;
+import es.weso.acota.persistence.DBMS;
 import es.weso.acota.persistence.nosql.MongoDBDAO;
 
 /**
@@ -49,8 +49,10 @@ public class RecommenderUtil implements FeedbackConfigurable {
 			throws AcotaPersistenceException, AcotaConfigurationException {
 		super();
 		loadConfiguration(configuration);
-		this.db = MongoDBDAO.getInstance(this.configuration).getDb();
-		this.feedbacks = db.getCollection(feedbackTableName);
+		if(this.configuration.getDatabaseType().equals(DBMS.DB_MONGODB)){
+			this.db = MongoDBDAO.getInstance(this.configuration).getDb();
+			this.feedbacks = db.getCollection(feedbackTableName);
+		}
 	}
 
 	@Override
@@ -68,12 +70,11 @@ public class RecommenderUtil implements FeedbackConfigurable {
 	 * Loads into memory the Mahout Recommender
 	 * @return ItemBasedRecommender Interface implemented by "item-based"
 	 *         recommenders.
-	 * @throws IOException
-	 *             Signals that an I/O exception of some sort has occurred.
-	 * @throws AcotaPersistenceException
-	 * @throws TasteException
+	 * @throws IOException Signals that an I/O exception of some sort has occurred.
+	 * @throws AcotaPersistenceException An exception that occurs while performing persistence
+	 * @throws TasteException An exception thrown when an error occurs inside the Taste engine.
 	 */
-	public ItemBasedRecommender loadRecommender() throws IOException,
+	public GenericItemBasedRecommender loadRecommender() throws IOException,
 			AcotaPersistenceException, TasteException {
 		this.dataModel = DataModelUtil.loadDataModel(configuration);
 		this.mongoDataModel = !MongoDBDataModel.class

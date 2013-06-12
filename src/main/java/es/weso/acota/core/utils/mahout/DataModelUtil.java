@@ -23,7 +23,7 @@ import es.weso.acota.core.exceptions.AcotaPersistenceException;
 import es.weso.acota.persistence.DBMS;
 
 /**
- * Loads a DataModel for the specific DBMS (MySQL, PostgreSQL or MongoDB=
+ * Loads a DataModel for a specific DBMS (MySQL, MariaDB, PostgreSQL or MongoDB)
  * @author César Luis Alvargonzález
  *
  */
@@ -98,9 +98,9 @@ public class DataModelUtil {
 	}
 	
 	/**
-	 * Returns a MySQL repository of information
+	 * Returns a MySQL/MariaDB repository of information
 	 * @param configuration Acota-feedback's configuration class
-	 * @return A MySQL repository of information 
+	 * @return A MySQL/MariaDB repository of information 
 	 */
 	protected static DataModel loadMySQLDataModel(FeedbackConfiguration configuration){
 		MysqlDataSource dataSource = new MysqlDataSource();
@@ -140,6 +140,12 @@ public class DataModelUtil {
 				feedback.getTimestampAttribute());
 	}
 	
+	/**
+	 * Returns the proper PORT for the specific {@link DataModel}.
+	 * @param port Port supplied by the configuration system.
+	 * @param defaultPort Default port for the specific DBMS
+	 * @return Proper port for the {@link DataModel}.
+	 */
 	protected static int getPort(String port, String defaultPort){
 		return Integer.parseInt(port.isEmpty() ? defaultPort : port);
 	}

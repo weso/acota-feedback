@@ -21,6 +21,12 @@ import es.weso.acota.persistence.DBMS;
 import es.weso.acota.persistence.LabelDAO;
 import es.weso.acota.persistence.sql.LabelSQLDAO;
 
+/**
+ * 
+ * LabelSQLDAO (MySQL) Unit Test
+ * @author César Luis Alvargonzález
+ *
+ */
 public class LabelMySQLDAOTest extends MySLQDAOTest{
 	
 	private LabelDAO labelDao;
@@ -46,7 +52,7 @@ public class LabelMySQLDAOTest extends MySLQDAOTest{
 		ITable actualTable = databaseDataSet.getTable("labels");
 
 		IDataSet expectedDataSet = new FlatXmlDataSetBuilder().build(this
-				.getClass().getResource("/resources/dbunitExpected.xml"));
+				.getClass().getResource("/dbunitExpected.xml"));
 		ITable expectedTable = expectedDataSet.getTable("labels");
 
 		assertEquals(expectedTable.getRowCount(), actualTable.getRowCount());

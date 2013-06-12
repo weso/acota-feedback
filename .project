@@ -4,6 +4,9 @@
   <comment>acota-feedback, library 0.3.8-SNAPSHOT. NO_M2ECLIPSE_SUPPORT: Project files created with the maven-eclipse-plugin are not supported in M2Eclipse.</comment>
   <projects>
     <project>acota-seed</project>
+    <project>mahout-core</project>
+    <project>mahout-math</project>
+    <project>mahout-integration</project>
   </projects>
   <buildSpec>
     <buildCommand>

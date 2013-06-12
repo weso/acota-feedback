@@ -24,6 +24,7 @@ import es.weso.acota.persistence.LabelDAO;
  * @see GenericMongoDBDAO
  * @see LabelDAO
  * @author César Luis Alvargonzález
+ * @since 0.3.8
  */
 public class LabelMongoDBDAO extends GenericMongoDBDAO implements LabelDAO {
 	

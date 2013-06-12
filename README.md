@@ -5,7 +5,16 @@ Develop: [![Build Status](https://travis-ci.org/weso/acota-feedback.png?branch=d
 
 
 ## What is it? ##
-Acota-Feedback adds an Enhancer powered by machine-learning techniques.
+Acota-Feedback adds an Enhancer powered by machine-learning techniques
+
+Build upon:
+- Apache Mahout
+
+Supports:
+ - MySQL
+ - MariaDB
+ - PostgresSQL
+ - MongoDB
 
 
 ## Configuration example ##
@@ -18,7 +27,7 @@ Detailed information of how to run acota-feedback:
  - [Acota-Feedback] (https://github.com/weso/acota-feedback/wiki/Generate-Some-Keywords)
 
 ## Download ##
-The current version of acota is **0.3.7**, you can download it from:
+The current version of acota is **0.3.8-SNAPSHOT**, you can download it from:
 
 ### For Maven Users
 Acota-Core is available in Maven Central:
@@ -26,22 +35,18 @@ Acota-Core is available in Maven Central:
   <dependency>
     <groupId>es.weso</groupId>
     <artifactId>acota-feedback</artifactId>
-    <version>0.3.7</version>
+    <version>0.3.8-SNAPSHOT</version>
  </dependency>
  ```
  
-Looking for SNAPSHOTS?
-* [SNAPSHOTS](https://oss.sonatype.org/content/repositories/snapshots/es/weso/acota-feedback/0.3.7-SNAPSHOT/ "Acota-feedback SNAPSHOTS Repository")
-
-### For Non Maven Users
-Acota-bundle includes all required dependancies:
-
- * [acota-feedback-0.3.7.jar](http://156.35.82.101:7000/downloads/acota/0.3.7/core/acota-feedback-0.3.7.jar "Download acota-feedback-0.3.7.jar")
-
+Looking for other SNAPSHOTS?
+* [SNAPSHOTS](https://oss.sonatype.org/content/repositories/snapshots/es/weso/acota-feedback/0.3.8-SNAPSHOT/ "Acota-feedback SNAPSHOTS Repository")
 
 ## Disclaimer
-Acota-feedback requires a MySQL Database, you can download the SQL Creation Script from:
- * [ACOTA's Database SQL Dump](http://156.35.82.101:7000/downloads/acota/utils/acota.sql "ACOTA's Database SQL Dump")
+Acota-feedback requires an SQL Database, you can download the SQL Creation Script from:
+ * [ACOTA's Database MySQL Dump](http://156.35.82.101:7000/downloads/acota/utils/mysql/acota.sql "ACOTA's Database SQL Dump")
+ * [ACOTA's Database PostgreSQL Dump](http://156.35.82.101:7000/downloads/acota/utils/postgres/acota.sql "ACOTA's Database SQL Dump")
+
 
 ## License
 

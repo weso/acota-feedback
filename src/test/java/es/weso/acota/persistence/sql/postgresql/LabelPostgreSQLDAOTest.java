@@ -21,32 +21,39 @@ import es.weso.acota.persistence.DBMS;
 import es.weso.acota.persistence.LabelDAO;
 import es.weso.acota.persistence.sql.LabelSQLDAO;
 
+/**
+ * 
+ * LabelSQLDAO (PostgreSQL) Unit Test
+ * @author César Luis Alvargonzález
+ *
+ */
 public class LabelPostgreSQLDAOTest extends PostgreSQLDAOTest{
 	
-	private LabelDAO labelDao;
+	private LabelDAO labelDAO;
 	
 	@Before
 	public void init() throws DatabaseUnitException, SQLException, Exception {
 		super.init();
 		FeedbackConfiguration feedback = new FeedbackConfiguration();
 		feedback.setDatabaseType(DBMS.DB_POSTGRESQL);
-		this.labelDao = new LabelSQLDAO(feedback); 
+		this.labelDAO = new LabelSQLDAO(feedback); 
 	}
 
 	@After
 	public void after() throws Exception {
 		super.after();
+		labelDAO = null;
 	}
 	
 	@Test
 	public void saveLabelTest() throws Exception {
-		labelDao.saveLabel("foo".hashCode(), "foo");
+		labelDAO.saveLabel("foo".hashCode(), "foo");
 
 		IDataSet databaseDataSet = getConnection().createDataSet();
 		ITable actualTable = databaseDataSet.getTable("labels");
 
 		IDataSet expectedDataSet = new FlatXmlDataSetBuilder().build(this
-				.getClass().getResource("/resources/dbunitExpected.xml"));
+				.getClass().getResource("/dbunitExpected.xml"));
 		ITable expectedTable = expectedDataSet.getTable("labels");
 
 		assertEquals(expectedTable.getRowCount(), actualTable.getRowCount());
@@ -55,27 +62,27 @@ public class LabelPostgreSQLDAOTest extends PostgreSQLDAOTest{
 	
 	@Test
 	public void getLabelByIdThatNotExists() throws AcotaPersistenceException {
-		assertEquals(null, labelDao.getLabelById(1000));
+		assertEquals(null, labelDAO.getLabelById(1000));
 	}
 	
 	@Test
 	public void getLabelByIdTest() throws AcotaPersistenceException {
-		assertEquals("group", labelDao.getLabelById(98629247));
+		assertEquals("group", labelDAO.getLabelById(98629247));
 	}
 	
 	@Test
 	public void getLabelByHashThatNotExists() throws AcotaPersistenceException {
-		assertEquals(null, labelDao.getLabelByHash(1000));
+		assertEquals(null, labelDAO.getLabelByHash(1000));
 	}
 	
 	@Test
 	public void getLabelByHashTest() throws AcotaPersistenceException {
-		assertEquals("group", labelDao.getLabelByHash(98629247));
+		assertEquals("group", labelDAO.getLabelByHash(98629247));
 	}
 	
 	@Test
 	public void getLabelsByIdsEmpty() throws AcotaPersistenceException {
-		assertEquals(Collections.EMPTY_SET, labelDao.getLabelsByIds(Collections.<Integer> emptySet()));
+		assertEquals(Collections.EMPTY_SET, labelDAO.getLabelsByIds(Collections.<Integer> emptySet()));
 	}
 	
 	@Test
@@ -83,7 +90,7 @@ public class LabelPostgreSQLDAOTest extends PostgreSQLDAOTest{
 		Set<Integer> ids = new HashSet<Integer>();
 		ids.add(9238424);
 		ids.add(93247);
-		assertEquals(Collections.EMPTY_SET, labelDao.getLabelsByHashCodes(ids));
+		assertEquals(Collections.EMPTY_SET, labelDAO.getLabelsByHashCodes(ids));
 	}
 	
 	@Test
@@ -95,12 +102,12 @@ public class LabelPostgreSQLDAOTest extends PostgreSQLDAOTest{
 		Set<Integer> ids = new HashSet<Integer>();
 		ids.add(98629247);
 		ids.add(-350895717);
-		assertEquals(labels, labelDao.getLabelsByIds(ids));
+		assertEquals(labels, labelDAO.getLabelsByIds(ids));
 	}
 	
 	@Test
 	public void getLabelsByHashesEmpty() throws AcotaPersistenceException {
-		assertEquals(Collections.EMPTY_SET, labelDao.getLabelsByHashCodes(Collections.<Integer> emptySet()));
+		assertEquals(Collections.EMPTY_SET, labelDAO.getLabelsByHashCodes(Collections.<Integer> emptySet()));
 	}
 	
 	@Test
@@ -108,7 +115,7 @@ public class LabelPostgreSQLDAOTest extends PostgreSQLDAOTest{
 		Set<Integer> hashes = new HashSet<Integer>();
 		hashes.add(9238424);
 		hashes.add(93247);
-		assertEquals(Collections.EMPTY_SET, labelDao.getLabelsByHashCodes(hashes));
+		assertEquals(Collections.EMPTY_SET, labelDAO.getLabelsByHashCodes(hashes));
 	}
 	
 	@Test
@@ -120,7 +127,7 @@ public class LabelPostgreSQLDAOTest extends PostgreSQLDAOTest{
 		Set<Integer> hashes = new HashSet<Integer>();
 		hashes.add(98629247);
 		hashes.add(-350895717);
-		assertEquals(labels, labelDao.getLabelsByHashCodes(hashes));
+		assertEquals(labels, labelDAO.getLabelsByHashCodes(hashes));
 	}
 	
 }

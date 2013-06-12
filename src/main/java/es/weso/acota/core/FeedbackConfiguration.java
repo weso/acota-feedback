@@ -113,8 +113,9 @@ public class FeedbackConfiguration extends SeedConfiguration implements Configur
 			this.databaseType = DB_POSTGRESQL;
 		}else if(databaseType.equals(DB_MONGODB)){
 			this.databaseType = DB_MONGODB;
+		}else{
+			this.databaseType = databaseType;
 		}
-		this.databaseType = databaseType;
 	}
 
 	public String getDatabaseUrl() {

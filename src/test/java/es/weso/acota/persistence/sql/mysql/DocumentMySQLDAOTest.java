@@ -21,6 +21,12 @@ import es.weso.acota.persistence.DBMS;
 import es.weso.acota.persistence.DocumentDAO;
 import es.weso.acota.persistence.sql.DocumentSQLDAO;
 
+/**
+ * 
+ * DocumentSQLDAO (MySQL) Unit Test
+ * @author César Luis Alvargonzález
+ *
+ */
 public class DocumentMySQLDAOTest extends MySLQDAOTest{
 	
 	private DocumentDAO documentDao;
@@ -46,7 +52,7 @@ public class DocumentMySQLDAOTest extends MySLQDAOTest{
 		ITable actualTable = databaseDataSet.getTable("documents");
 
 		IDataSet expectedDataSet = new FlatXmlDataSetBuilder().build(this
-				.getClass().getResource("/resources/dbunitExpected.xml"));
+				.getClass().getResource("/dbunitExpected.xml"));
 		ITable expectedTable = expectedDataSet.getTable("documents");
 
 		assertEquals(expectedTable.getRowCount(), actualTable.getRowCount());

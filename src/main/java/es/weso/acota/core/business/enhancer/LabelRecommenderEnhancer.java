@@ -1,5 +1,6 @@
 package es.weso.acota.core.business.enhancer;
 
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 import java.util.HashSet;
@@ -8,8 +9,8 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import org.apache.mahout.cf.taste.common.TasteException;
+import org.apache.mahout.cf.taste.impl.recommender.GenericItemBasedRecommender;
 import org.apache.mahout.cf.taste.model.DataModel;
-import org.apache.mahout.cf.taste.recommender.ItemBasedRecommender;
 import org.apache.mahout.cf.taste.recommender.RecommendedItem;
 
 import es.weso.acota.core.FeedbackConfiguration;
@@ -38,7 +39,7 @@ public class LabelRecommenderEnhancer extends EnhancerAdapter implements Feedbac
 	protected LanguageDetector languageDetector;
 	protected DataModel dataModel;
 	protected RecommenderUtil recommenderUtil;
-	
+	protected GenericItemBasedRecommender recommender;
 	protected int numRecommendations;
 	protected double relevance;
 	
@@ -69,7 +70,7 @@ public class LabelRecommenderEnhancer extends EnhancerAdapter implements Feedbac
 				"Label Recommender Enhancer");
 		loadConfiguration(configuration);
 		this.labelDao = FactoryDAO.createLabelDAO(this.configuration);
-		this.recommenderUtil = new RecommenderUtil(configuration);
+		this.recommenderUtil = new RecommenderUtil(this.configuration);
 	}
 	
 	/**
@@ -113,8 +114,8 @@ public class LabelRecommenderEnhancer extends EnhancerAdapter implements Feedbac
 
 	@Override
 	protected void execute() throws Exception {
-		
-		ItemBasedRecommender recommender = recommenderUtil.loadRecommender();
+		loadRecommender();
+		recommender.refresh(null);
 		List<RecommendedItem> items = null;
 		
 		for (Entry<String, TagTO> label : AcotaUtil.backupTags(tags).entrySet()) {
@@ -132,19 +133,27 @@ public class LabelRecommenderEnhancer extends EnhancerAdapter implements Feedbac
 		}
  	}
 
-	@Override
-	protected void preExecute() throws Exception {
-		this.suggest = request.getSuggestions();
-		this.tags = suggest.getTags();
-		suggest.setResource(request.getResource());
+	/**
+	 * Updates the recommender if it is created, otherwise instantiates it.
+	 * @throws IOException Signals that an I/O exception of some sort has occurred.
+	 * @throws AcotaPersistenceException
+	 * @throws TasteException An exception thrown when an error occurs inside the Taste engine.
+	 */
+	protected void loadRecommender() throws IOException,
+			AcotaPersistenceException, TasteException {
+		if(recommender == null){
+			this.recommender = recommenderUtil.loadRecommender();
+		}else{
+			recommender.refresh(null);
+		}
 	}
 
 	@Override
+	protected void preExecute() throws Exception { }
+
+	@Override
 	protected void postExecute() throws Exception {
-		logger.debug("Add providers to request");
 		this.request.getTargetProviders().add(getProvider());
-		logger.debug("Add suggestons to request");
-		this.request.setSuggestions(suggest);
 	}
 
 	/**

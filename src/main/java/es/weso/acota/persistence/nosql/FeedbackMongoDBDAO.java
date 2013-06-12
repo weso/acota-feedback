@@ -24,6 +24,7 @@ import es.weso.acota.persistence.FeedbackDAO;
  * @see GenericMongoDBDAO
  * @see FeedbackDAO
  * @author César Luis Alvargonzález
+ * @since 0.3.8
  */
 public class FeedbackMongoDBDAO extends GenericMongoDBDAO implements
 		FeedbackDAO {

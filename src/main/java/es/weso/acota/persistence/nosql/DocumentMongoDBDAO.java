@@ -26,7 +26,7 @@ import es.weso.acota.persistence.sql.GenericSQLDAO;
  * @see GenericSQLDAO
  * @see DocumentDAO
  * @author César Luis Alvargonzález
- *
+ * @since 0.3.8
  */
 public class DocumentMongoDBDAO extends GenericMongoDBDAO implements DocumentDAO {
 	

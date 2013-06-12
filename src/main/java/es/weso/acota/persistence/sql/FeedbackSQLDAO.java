@@ -46,7 +46,7 @@ public class FeedbackSQLDAO extends GenericSQLDAO implements FeedbackDAO {
 	 * a Configuration object
 	 */
 	public FeedbackSQLDAO() throws AcotaConfigurationException {
-		super();
+		super(null);
 		loadConfiguration(configuration);
 	}
 
@@ -57,7 +57,7 @@ public class FeedbackSQLDAO extends GenericSQLDAO implements FeedbackDAO {
 	 * a Configuration object
 	 */
 	public FeedbackSQLDAO(FeedbackConfiguration configuration) throws AcotaConfigurationException {
-		super();
+		super(configuration);
 		loadConfiguration(configuration);
 	}
 	
@@ -65,7 +65,6 @@ public class FeedbackSQLDAO extends GenericSQLDAO implements FeedbackDAO {
 	public void loadConfiguration(FeedbackConfiguration configuration)
 			throws AcotaConfigurationException {
 		super.loadConfiguration(configuration);
-		
 		DocumentTable document = this.configuration.getDocumentTable();
 		this.documentTableName = this.configuration.getDatabasePrefix()+document.getName();
 		this.documentIdAttribute = document.getIdAttribute();

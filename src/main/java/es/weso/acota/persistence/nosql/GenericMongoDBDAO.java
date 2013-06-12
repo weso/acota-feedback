@@ -8,6 +8,7 @@ import es.weso.acota.persistence.GenericDAO;
  * Concrete implementation of LabelDAO for the MongoDB DBMS
  * @see GenericDAO
  * @author César Luis Alvargonzález
+ * @since 0.3.8
  */
 public class GenericMongoDBDAO implements GenericDAO{
 
